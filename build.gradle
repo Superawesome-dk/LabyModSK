@@ -1,0 +1,46 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'java'
+}
+
+group = 'dk.superawesome'
+version = '1.0-SNAPSHOT'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+repositories {
+    mavenCentral()
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+    maven {
+        url 'https://jitpack.io'
+    }
+    maven {
+        url 'https://repo.destroystokyo.com/repository/maven-public/'
+    }
+    maven {
+        url 'http://repo.citizensnpcs.co/'
+    }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+    implementation (group: 'com.github.SkriptLang', name: 'Skript', version: '2.4-alpha1') {
+        transitive = false
+    }
+    compile 'org.jetbrains:annotations:16.0.2'
+    implementation (group: 'net.citizensnpcs', name: 'citizensapi', version: '2.0.27-SNAPSHOT')
+    compile files('/libs/build-1.0-SNAPSHOT.jar')
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        filter ReplaceTokens, tokens: [version: version]
+    }
+}
