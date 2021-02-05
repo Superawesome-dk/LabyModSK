@@ -7,22 +7,23 @@ import ch.njol.util.Kleenean;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.labymod.serverapi.bukkit.LabyModPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 
 public class SubleTitle extends Effect {
-    private Expression<Player> player;
+    private Expression<Player> players;
     private Expression<String> value;
-    private Expression<String> size;
+    private Expression<Number> size;
     private Expression<Player> targets;
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        this.player = (Expression<Player>) expressions[0];
+        this.players = (Expression<Player>) expressions[0];
         this.value = (Expression<String>) expressions[1];
-        this.size = (Expression<String>) expressions[2];
+        this.size = (Expression<Number>) expressions[2];
         this.targets = (Expression<Player>) expressions[3];
         return true;
     }
@@ -34,16 +35,15 @@ public class SubleTitle extends Effect {
     @Override
     protected void execute(Event event) {
         JsonArray array = new JsonArray();
+        for(Player player : players.getArray(event)) {
+            JsonObject subtitle = new JsonObject();
+            subtitle.addProperty("uuid", player.getUniqueId().toString());
+            subtitle.addProperty("size", size.getSingle(event));
 
-        JsonObject subtitle = new JsonObject();
-        subtitle.addProperty( "uuid", player.getSingle(event).getUniqueId().toString() );
-
-        subtitle.addProperty( "size", size.getSingle(event) ); // Range is 0.8 - 1.6 (1.6 is Minecraft default)
-
-        if(value != null)
-            subtitle.addProperty( "value", value.getSingle(event) );
-
-        array.add(subtitle);
+            if (value != null)
+                subtitle.addProperty("value", value.getSingle(event));
+            array.add(subtitle);
+        }
         for (Player target : targets.getArray(event))
             LabyModPlugin.getInstance().sendServerMessage(target, "account_subtitle", array);
     }

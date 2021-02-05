@@ -22,6 +22,7 @@ import net.labymod.serverapi.bukkit.event.LabyModPlayerJoinEvent;
 import net.labymod.serverapi.bukkit.event.MessageSendEvent;
 import net.labymod.serverapi.bukkit.event.PermissionsSendEvent;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +48,7 @@ public final class main extends JavaPlugin {
         Skript.registerEffect(NPCsticker.class, "play sticker for %citizen% to %number% for %players%");
         Skript.registerEffect(DiscordRich.class, "set discord rich for %players% to %string%");
         Skript.registerEffect(PlayingNow.class, "set playing now for %players% to %string%");
-        Skript.registerEffect(SubleTitle.class, "set subletitle for %players% to %string% with size %number% for %players%");
+        Skript.registerEffect(SubleTitle.class, "set subletitle for %players% to %string% [with size %number%] for %players%");
         Skript.registerExpression(ActionMenu.class, String.class, ExpressionType.COMBINED, "[the] action menu of %players%");
         Skript.registerEvent("labymod permissionsend", SimpleEvent.class, PermissionsSendEvent.class, "labymod permissionsend");
         /*registerEventValue(PermissionsSendEvent.class, OfflinePlayer.class, new Getter<OfflinePlayer, PermissionsSendEvent>() {
@@ -57,9 +58,9 @@ public final class main extends JavaPlugin {
             }
         }, 0); */
         Skript.registerEvent("labymod join", SimpleEvent.class, LabyModPlayerJoinEvent.class, "labymod join");
-        registerEventValue(LabyModPlayerJoinEvent.class, OfflinePlayer.class, new Getter<OfflinePlayer, LabyModPlayerJoinEvent>() {
+        registerEventValue(LabyModPlayerJoinEvent.class, Player.class, new Getter<Player, LabyModPlayerJoinEvent>() {
             @Override
-            public OfflinePlayer get(LabyModPlayerJoinEvent event) {
+            public Player get(LabyModPlayerJoinEvent event) {
                 return event.getPlayer();
             }
         }, 0);
