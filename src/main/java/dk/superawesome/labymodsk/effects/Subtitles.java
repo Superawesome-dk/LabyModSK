@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 
-public class SubleTitle extends Effect {
+public class Subtitles extends Effect {
     private Expression<Player> players;
     private Expression<String> value;
     private Expression<Number> size;

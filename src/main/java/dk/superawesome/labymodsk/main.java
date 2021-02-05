@@ -48,7 +48,8 @@ public final class main extends JavaPlugin {
         Skript.registerEffect(NPCsticker.class, "play sticker for %citizen% to %number% for %players%");
         Skript.registerEffect(DiscordRich.class, "set discord rich for %players% to %string%");
         Skript.registerEffect(PlayingNow.class, "set playing now for %players% to %string%");
-        Skript.registerEffect(SubleTitle.class, "set subletitle for %players% to %string% [with size %number%] for %players%");
+        Skript.registerEffect(Subtitles.class, "set subtitles for %players% to %string% [with size %number%] for %players%");
+        Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
         Skript.registerExpression(ActionMenu.class, String.class, ExpressionType.COMBINED, "[the] action menu of %players%");
         Skript.registerEvent("labymod permissionsend", SimpleEvent.class, PermissionsSendEvent.class, "labymod permissionsend");
         /*registerEventValue(PermissionsSendEvent.class, OfflinePlayer.class, new Getter<OfflinePlayer, PermissionsSendEvent>() {
