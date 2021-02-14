@@ -2,6 +2,8 @@ name: LabymodSK
 version: @version@
 main: dk.superawesome.labymodsk.main
 load: STARTUP
+depend: [Skript, LabyModAPI]
+softdepend: [Citizens]
 commands:
   labymodsk:
     description: "Labymod kommand til at spawn npc"

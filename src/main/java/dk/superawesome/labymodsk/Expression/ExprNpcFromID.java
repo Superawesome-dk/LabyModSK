@@ -1,4 +1,4 @@
-package dk.superawesome.labymodsk.Expression.npcs;
+package dk.superawesome.labymodsk.Expression;
 
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;

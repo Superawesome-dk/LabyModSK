@@ -10,23 +10,17 @@ import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Getter;
-import dk.superawesome.labymodsk.Expression.ActionMenu;
-import dk.superawesome.labymodsk.Expression.npcs.ExprNpcFromID;
-import dk.superawesome.labymodsk.classes.Addons;
+import dk.superawesome.labymodsk.Expression.ExprNpcFromID;
 import dk.superawesome.labymodsk.classes.ModVersion;
 import dk.superawesome.labymodsk.commands.labymodsk;
 import dk.superawesome.labymodsk.effects.*;
 import net.citizensnpcs.api.npc.NPC;
-import net.labymod.serverapi.Addon;
 import net.labymod.serverapi.bukkit.event.LabyModPlayerJoinEvent;
-import net.labymod.serverapi.bukkit.event.MessageSendEvent;
 import net.labymod.serverapi.bukkit.event.PermissionsSendEvent;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 import static ch.njol.skript.registrations.EventValues.registerEventValue;
 
@@ -41,16 +35,17 @@ public final class main extends JavaPlugin {
 
         instance = this;
         addonInstance = Skript.registerAddon(instance);
-
-        this.getCommand("labymodsk").setExecutor(new labymodsk());
-        Skript.registerExpression(ExprNpcFromID.class, NPC.class, ExpressionType.COMBINED, "[the] (npc|citizen) (of|from) %number%");
-        Skript.registerEffect(NPCemoji.class, "play emoji for %citizen% to %number% for %players%");
-        Skript.registerEffect(NPCsticker.class, "play sticker for %citizen% to %number% for %players%");
+        if(Bukkit.getPluginManager().getPlugin("Citizens") != null) {
+            this.getCommand("labymodsk").setExecutor(new labymodsk());
+            Skript.registerExpression(ExprNpcFromID.class, NPC.class, ExpressionType.COMBINED, "[the] (npc|citizen) (of|from|with id) %number%");
+            Skript.registerEffect(NPCemoji.class, "play emoji for %citizen% to %number% for %players%");
+            Skript.registerEffect(NPCsticker.class, "play sticker for %citizen% to %number% for %players%");
+        }
         Skript.registerEffect(DiscordRich.class, "set discord rich for %players% to %string%");
         Skript.registerEffect(PlayingNow.class, "set playing now for %players% to %string%");
         Skript.registerEffect(Subtitles.class, "set subtitles for %players% to %string% [with size %number%] for %players%");
         Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
-        Skript.registerExpression(ActionMenu.class, String.class, ExpressionType.COMBINED, "[the] action menu of %players%");
+        //Skript.registerExpression(ActionMenu.class, String.class, ExpressionType.COMBINED, "[the] action menu of %players%");
         Skript.registerEvent("labymod permissionsend", SimpleEvent.class, PermissionsSendEvent.class, "labymod permissionsend");
         /*registerEventValue(PermissionsSendEvent.class, OfflinePlayer.class, new Getter<OfflinePlayer, PermissionsSendEvent>() {
             @Override
@@ -86,26 +81,32 @@ public final class main extends JavaPlugin {
     }
 
     public void registerClasses() {
-        Classes.registerClass(new ClassInfo<NPC>(NPC.class, "citizen")
-                .name("npc")
-                .description("A getter for npc")
-                .parser(new Parser<NPC>() {
-                    @Override
-                    @Nullable
-                    public NPC parse(String obj, ParseContext context) {
-                        return null;
-                    }
-                    @Override
-                    public String toString(NPC e, int flags) {
-                        return e.toString();
-                    }
-                    @Override
-                    public String toVariableNameString(NPC e) {
-                        return e.toString();
-                    }
-                    public String getVariableNamePattern() {
-                        return ".+";
-                    }}));
+        if(Bukkit.getPluginManager().getPlugin("Citizens") != null) {
+            Classes.registerClass(new ClassInfo<NPC>(NPC.class, "citizen")
+                    .name("npc")
+                    .description("A getter for npc")
+                    .parser(new Parser<NPC>() {
+                        @Override
+                        @Nullable
+                        public NPC parse(String obj, ParseContext context) {
+                            return null;
+                        }
+
+                        @Override
+                        public String toString(NPC e, int flags) {
+                            return e.toString();
+                        }
+
+                        @Override
+                        public String toVariableNameString(NPC e) {
+                            return e.toString();
+                        }
+
+                        public String getVariableNamePattern() {
+                            return ".+";
+                        }
+                    }));
+        }
         Classes.registerClass(new ClassInfo<>(ModVersion.class, "modversion")
                 .defaultExpression(new EventValueExpression<>(ModVersion.class))
                 .user("modversion")

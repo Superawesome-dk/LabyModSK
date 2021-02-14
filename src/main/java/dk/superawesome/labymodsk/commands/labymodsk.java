@@ -39,7 +39,9 @@ public class labymodsk implements CommandExecutor {
             } else {
                 player.sendMessage(Utils.color("&2Du har glemt navnet på npcen."));
             }
+            return true;
         }
+        player.sendMessage(Utils.color("&2/labymodsk npccreate"));
         return true;
     }
 }
