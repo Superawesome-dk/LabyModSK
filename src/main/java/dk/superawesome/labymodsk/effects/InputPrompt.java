@@ -21,11 +21,11 @@ public class InputPrompt extends Effect {
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         this.player = (Expression<Player>) expressions[5];
-        this.id = (Expression<Integer>) expressions[4];
+        this.maxLength = (Expression<Integer>) expressions[4];
         this.message = (Expression<String>) expressions[3];
         this.value = (Expression<String>) expressions[2];
         this.placeholder = (Expression<String>) expressions[1];
-        this.maxLength = (Expression<Integer>) expressions[0];
+        this.id = (Expression<Integer>) expressions[0];
         return true;
     }
     @Override

@@ -24,12 +24,9 @@ import net.labymod.serverapi.bukkit.event.MessageReceiveEvent;
 import net.labymod.serverapi.bukkit.event.MessageSendEvent;
 import net.labymod.serverapi.bukkit.event.PermissionsSendEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 import static ch.njol.skript.registrations.EventValues.registerEventValue;
 
@@ -55,6 +52,7 @@ public final class main extends JavaPlugin {
         Skript.registerEffect(PlayingNow.class, "set playing now for %players% to %string%");
         Skript.registerEffect(Subtitles.class, "set subtitles for %players% to %string% [with size %number%] for %players%");
         Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
+        Skript.registerEffect(Cinescopes.class, "show cinescop with coverage %number% in %number% seconds to %players%");
         //Skript.registerExpression(ActionMenu.class, String.class, ExpressionType.COMBINED, "[the] action menu of %players%");
         Skript.registerEvent("labymod permissionsend", SimpleEvent.class, PermissionsSendEvent.class, "labymod permissionsend");
         /*registerEventValue(PermissionsSendEvent.class, OfflinePlayer.class, new Getter<OfflinePlayer, PermissionsSendEvent>() {
@@ -76,12 +74,6 @@ public final class main extends JavaPlugin {
                 return new ModVersion(event.getModVersion());
             }
         }, 0);
-        registerEventValue(LabyModPlayerJoinEvent.class, Addon.class, new Getter<Addon, LabyModPlayerJoinEvent>() {
-            @Override
-            public Addon get(LabyModPlayerJoinEvent event) {
-                return (Addon) event.getAddons();
-            }
-        }, 0);
         Skript.registerEvent("labymod message send", SimpleEvent.class, MessageSendEvent.class, "labymod message send");
         registerEventValue(MessageSendEvent.class, Player.class, new Getter<Player, MessageSendEvent>() {
             @Override
@@ -89,7 +81,7 @@ public final class main extends JavaPlugin {
                 return event.getPlayer();
             }
         }, 0);
-        Skript.registerEvent("labymod message receive", SimpleEvent.class, MessageReceiveEvent.class, "labymod message send");
+        Skript.registerEvent("labymod message receive", SimpleEvent.class, MessageReceiveEvent.class, "labymod message receive");
         registerEventValue(MessageReceiveEvent.class, Player.class, new Getter<Player, MessageReceiveEvent>() {
             @Override
             public Player get(MessageReceiveEvent event) {
