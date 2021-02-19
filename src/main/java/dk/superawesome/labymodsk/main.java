@@ -10,17 +10,26 @@ import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Getter;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import dk.superawesome.labymodsk.Expression.ExprNpcFromID;
+import dk.superawesome.labymodsk.classes.MessageKey;
 import dk.superawesome.labymodsk.classes.ModVersion;
 import dk.superawesome.labymodsk.commands.labymodsk;
 import dk.superawesome.labymodsk.effects.*;
 import net.citizensnpcs.api.npc.NPC;
+import net.labymod.serverapi.Addon;
 import net.labymod.serverapi.bukkit.event.LabyModPlayerJoinEvent;
+import net.labymod.serverapi.bukkit.event.MessageReceiveEvent;
+import net.labymod.serverapi.bukkit.event.MessageSendEvent;
 import net.labymod.serverapi.bukkit.event.PermissionsSendEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import static ch.njol.skript.registrations.EventValues.registerEventValue;
 
@@ -41,6 +50,7 @@ public final class main extends JavaPlugin {
             Skript.registerEffect(NPCemoji.class, "play emoji for %citizen% to %number% for %players%");
             Skript.registerEffect(NPCsticker.class, "play sticker for %citizen% to %number% for %players%");
         }
+        Skript.registerEffect(InputPrompt.class, "show input prompt with id %number% and message %string% and value %string% and placeholder %string% and max length %number% to %players%");
         Skript.registerEffect(DiscordRich.class, "set discord rich for %players% to %string%");
         Skript.registerEffect(PlayingNow.class, "set playing now for %players% to %string%");
         Skript.registerEffect(Subtitles.class, "set subtitles for %players% to %string% [with size %number%] for %players%");
@@ -66,13 +76,39 @@ public final class main extends JavaPlugin {
                 return new ModVersion(event.getModVersion());
             }
         }, 0);
-        /*Skript.registerEvent("labymod message send", SimpleEvent.class, MessageSendEvent.class, "labymod message send");
-        registerEventValue(MessageSendEvent.class, OfflinePlayer.class, new Getter<OfflinePlayer, MessageSendEvent>() {
+        registerEventValue(LabyModPlayerJoinEvent.class, Addon.class, new Getter<Addon, LabyModPlayerJoinEvent>() {
             @Override
-            public OfflinePlayer get(MessageSendEvent event) {
+            public Addon get(LabyModPlayerJoinEvent event) {
+                return (Addon) event.getAddons();
+            }
+        }, 0);
+        Skript.registerEvent("labymod message send", SimpleEvent.class, MessageSendEvent.class, "labymod message send");
+        registerEventValue(MessageSendEvent.class, Player.class, new Getter<Player, MessageSendEvent>() {
+            @Override
+            public Player get(MessageSendEvent event) {
                 return event.getPlayer();
             }
-        }, 0); */
+        }, 0);
+        Skript.registerEvent("labymod message receive", SimpleEvent.class, MessageReceiveEvent.class, "labymod message send");
+        registerEventValue(MessageReceiveEvent.class, Player.class, new Getter<Player, MessageReceiveEvent>() {
+            @Override
+            public Player get(MessageReceiveEvent event) {
+                return event.getPlayer();
+            }
+        }, 0);
+        registerEventValue(MessageReceiveEvent.class, MessageKey.class, new Getter<MessageKey, MessageReceiveEvent>() {
+            @Override
+            public MessageKey get(MessageReceiveEvent event) {
+                return new MessageKey(event.getMessageKey());
+            }
+        }, 0);
+        registerEventValue(MessageReceiveEvent.class, String.class, new Getter<String, MessageReceiveEvent>() {
+            @Override
+            public String get(MessageReceiveEvent event) {
+                Gson gson = new Gson();
+                return gson.fromJson(event.getJsonElement(), JsonElement.class).toString();
+            }
+        }, 0);
     }
 
     @Override
@@ -130,6 +166,33 @@ public final class main extends JavaPlugin {
 
                     @Override
                     public String toVariableNameString(ModVersion arg0) {
+                        return arg0.toString();
+                    }
+
+                }));
+        Classes.registerClass(new ClassInfo<>(MessageKey.class, "messagekey")
+                .defaultExpression(new EventValueExpression<>(MessageKey.class))
+                .user("messagekey")
+                .name("messagekey")
+                .parser(new Parser<MessageKey>() {
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+
+                    @Override
+                    public MessageKey parse(String arg0, ParseContext arg1) {
+                        return null;
+                    }
+
+                    @Override
+                    public String toString(MessageKey arg0, int arg1) {
+                        return arg0.toString();
+                    }
+
+                    @Override
+                    public String toVariableNameString(MessageKey arg0) {
                         return arg0.toString();
                     }
 
