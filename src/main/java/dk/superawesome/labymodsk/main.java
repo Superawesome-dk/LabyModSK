@@ -17,6 +17,7 @@ import com.google.gson.JsonObject;
 import dk.superawesome.labymodsk.Expression.ActionEntry;
 import dk.superawesome.labymodsk.Expression.ExprNpcFromID;
 import dk.superawesome.labymodsk.Expression.Subtitle;
+import dk.superawesome.labymodsk.classes.addons;
 import dk.superawesome.labymodsk.classes.MessageKey;
 import dk.superawesome.labymodsk.classes.ModVersion;
 import dk.superawesome.labymodsk.commands.labymodsk;
@@ -31,12 +32,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
-import org.json.simple.JSONObject;
-
-import java.lang.reflect.Array;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 import static ch.njol.skript.registrations.EventValues.registerEventValue;
 
@@ -60,7 +55,6 @@ public final class main extends JavaPlugin {
         Skript.registerEffect(InputPrompt.class, "show input prompt with id %number% and message %string% and value %string% and placeholder %string% and max length %number% to %players%");
         Skript.registerEffect(DiscordRich.class, "set discord rich for %players% to %string%");
         Skript.registerEffect(PlayingNow.class, "set playing now for %players% to %string%");
-
         Skript.registerExpression(Subtitle.class, String.class, ExpressionType.COMBINED, "[the] subtitle for %players%[ and value %-string%][ and size %-number%]");
         Skript.registerEffect(Subtitles.class, "show subtitles %strings% for %players%");
         Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
@@ -69,12 +63,12 @@ public final class main extends JavaPlugin {
         Skript.registerEffect(ActionMenu.class, "show actionmenu %strings% to %players%");
         Skript.registerExpression(ActionEntry.class, String.class, ExpressionType.COMBINED, "[the] action entry with displayname %string% and type %string% and value %string%");
         Skript.registerEvent("labymod permissionsend", SimpleEvent.class, PermissionsSendEvent.class, "labymod permissionsend");
-        /*registerEventValue(PermissionsSendEvent.class, OfflinePlayer.class, new Getter<OfflinePlayer, PermissionsSendEvent>() {
+        registerEventValue(PermissionsSendEvent.class, Player.class, new Getter<Player, PermissionsSendEvent>() {
             @Override
-            public OfflinePlayer get(PermissionsSendEvent event) {
+            public Player get(PermissionsSendEvent event) {
                 return event.getPlayer();
             }
-        }, 0); */
+        }, 0);
         Skript.registerEvent("labymod join", SimpleEvent.class, LabyModPlayerJoinEvent.class, "labymod join");
         registerEventValue(LabyModPlayerJoinEvent.class, Player.class, new Getter<Player, LabyModPlayerJoinEvent>() {
             @Override
@@ -88,9 +82,9 @@ public final class main extends JavaPlugin {
                 return new ModVersion(event.getModVersion());
             }
         }, 0);
-        registerEventValue(LabyModPlayerJoinEvent.class, String.class, new Getter<String, LabyModPlayerJoinEvent>() {
+        registerEventValue(LabyModPlayerJoinEvent.class, addons.class, new Getter<addons, LabyModPlayerJoinEvent>() {
             @Override
-            public String get(LabyModPlayerJoinEvent event) {
+            public addons get(LabyModPlayerJoinEvent event) {
                 JsonArray addonList = new JsonArray();
                 for (Addon addon : event.getAddons()) {
                     JsonObject addonIndex = new JsonObject();
@@ -99,7 +93,7 @@ public final class main extends JavaPlugin {
                     addonList.add(addonIndex);
                 }
                 Gson gson = new Gson();
-                return gson.fromJson(addonList, JsonArray.class).toString();
+                return new addons(gson.fromJson(addonList, JsonArray.class).toString());
             }
         }, 0);
         Skript.registerEvent("labymod message send", SimpleEvent.class, MessageSendEvent.class, "labymod message send");
@@ -109,10 +103,17 @@ public final class main extends JavaPlugin {
                 return event.getPlayer();
             }
         }, 0);
-        registerEventValue(MessageSendEvent.class, Player.class, new Getter<Player, MessageSendEvent>() {
+        registerEventValue(MessageSendEvent.class, MessageKey.class, new Getter<MessageKey, MessageSendEvent>() {
             @Override
-            public Player get(MessageSendEvent event) {
-                return event.getPlayer();
+            public MessageKey get(MessageSendEvent event) {
+                return new MessageKey(event.getMessageKey());
+            }
+        }, 0);
+        registerEventValue(MessageSendEvent.class, String.class, new Getter<String, MessageSendEvent>() {
+            @Override
+            public String get(MessageSendEvent event) {
+                Gson gson = new Gson();
+                return gson.fromJson(event.getJsonElement(), JsonElement.class).toString();
             }
         }, 0);
         Skript.registerEvent("labymod message receive", SimpleEvent.class, MessageReceiveEvent.class, "labymod message receive");
@@ -219,6 +220,33 @@ public final class main extends JavaPlugin {
 
                     @Override
                     public String toVariableNameString(MessageKey arg0) {
+                        return arg0.toString();
+                    }
+
+                }));
+        Classes.registerClass(new ClassInfo<>(addons.class, "addons")
+                .defaultExpression(new EventValueExpression<>(addons.class))
+                .user("addons")
+                .name("addons")
+                .parser(new Parser<addons>() {
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+
+                    @Override
+                    public addons parse(String arg0, ParseContext arg1) {
+                        return null;
+                    }
+
+                    @Override
+                    public String toString(addons arg0, int arg1) {
+                        return arg0.toString();
+                    }
+
+                    @Override
+                    public String toVariableNameString(addons arg0) {
                         return arg0.toString();
                     }
 
