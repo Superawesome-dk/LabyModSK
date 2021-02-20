@@ -4,6 +4,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.labymod.serverapi.bukkit.LabyModPlugin;
@@ -13,18 +14,14 @@ import org.bukkit.event.Event;
 
 
 public class Subtitles extends Effect {
-    private Expression<Player> players;
-    private Expression<String> value;
-    private Expression<Number> size;
     private Expression<Player> targets;
+    private Expression<String> subtitles;
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        this.players = (Expression<Player>) expressions[0];
-        this.value = (Expression<String>) expressions[1];
-        this.size = (Expression<Number>) expressions[2];
-        this.targets = (Expression<Player>) expressions[3];
+        this.targets = (Expression<Player>) expressions[1];
+        this.subtitles = (Expression<String>) expressions[0];
         return true;
     }
     @Override
@@ -34,17 +31,16 @@ public class Subtitles extends Effect {
 
     @Override
     protected void execute(Event event) {
-        JsonArray array = new JsonArray();
-        for(Player player : players.getArray(event)) {
-            JsonObject subtitle = new JsonObject();
-            subtitle.addProperty("uuid", player.getUniqueId().toString());
-            subtitle.addProperty("size", size.getSingle(event));
-
-            if (value != null)
-                subtitle.addProperty("value", value.getSingle(event));
-            array.add(subtitle);
+        Gson gson = new Gson();
+        JsonArray result = new JsonArray();
+        for(String a : subtitles.getArray(event)) {
+            JsonArray array = gson.fromJson(a, JsonArray.class);
+            for (int i = 0; i < array.size(); i++) {
+                result.add(array.get(i));
+            }
         }
-        for (Player target : targets.getArray(event))
-            LabyModPlugin.getInstance().sendServerMessage(target, "account_subtitle", array);
+        for(Player target : targets.getArray(event)) {
+            LabyModPlugin.getInstance().sendServerMessage( target, "account_subtitle", result );
+        }
     }
 }

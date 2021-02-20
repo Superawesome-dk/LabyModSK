@@ -11,14 +11,18 @@ import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Getter;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import dk.superawesome.labymodsk.Expression.ActionEntry;
 import dk.superawesome.labymodsk.Expression.ExprNpcFromID;
+import dk.superawesome.labymodsk.Expression.Subtitle;
 import dk.superawesome.labymodsk.classes.MessageKey;
 import dk.superawesome.labymodsk.classes.ModVersion;
 import dk.superawesome.labymodsk.commands.labymodsk;
 import dk.superawesome.labymodsk.effects.*;
 import net.citizensnpcs.api.npc.NPC;
+import net.labymod.serverapi.Addon;
 import net.labymod.serverapi.bukkit.event.LabyModPlayerJoinEvent;
 import net.labymod.serverapi.bukkit.event.MessageReceiveEvent;
 import net.labymod.serverapi.bukkit.event.MessageSendEvent;
@@ -27,6 +31,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
+import org.json.simple.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static ch.njol.skript.registrations.EventValues.registerEventValue;
 
@@ -50,7 +60,9 @@ public final class main extends JavaPlugin {
         Skript.registerEffect(InputPrompt.class, "show input prompt with id %number% and message %string% and value %string% and placeholder %string% and max length %number% to %players%");
         Skript.registerEffect(DiscordRich.class, "set discord rich for %players% to %string%");
         Skript.registerEffect(PlayingNow.class, "set playing now for %players% to %string%");
-        Skript.registerEffect(Subtitles.class, "set subtitles for %players% to %string% [with size %number%] for %players%");
+
+        Skript.registerExpression(Subtitle.class, String.class, ExpressionType.COMBINED, "[the] subtitle for %players%[ and value %-string%][ and size %-number%]");
+        Skript.registerEffect(Subtitles.class, "show subtitles %strings% for %players%");
         Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
         Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
         Skript.registerEffect(Cinescopes.class, "show cinescop with coverage %number% in %number% seconds to %players%");
@@ -76,7 +88,27 @@ public final class main extends JavaPlugin {
                 return new ModVersion(event.getModVersion());
             }
         }, 0);
+        registerEventValue(LabyModPlayerJoinEvent.class, String.class, new Getter<String, LabyModPlayerJoinEvent>() {
+            @Override
+            public String get(LabyModPlayerJoinEvent event) {
+                JsonArray addonList = new JsonArray();
+                for (Addon addon : event.getAddons()) {
+                    JsonObject addonIndex = new JsonObject();
+                    addonIndex.addProperty("uuid", String.valueOf(addon.getUuid()));
+                    addonIndex.addProperty("name", addon.getName());
+                    addonList.add(addonIndex);
+                }
+                Gson gson = new Gson();
+                return gson.fromJson(addonList, JsonArray.class).toString();
+            }
+        }, 0);
         Skript.registerEvent("labymod message send", SimpleEvent.class, MessageSendEvent.class, "labymod message send");
+        registerEventValue(MessageSendEvent.class, Player.class, new Getter<Player, MessageSendEvent>() {
+            @Override
+            public Player get(MessageSendEvent event) {
+                return event.getPlayer();
+            }
+        }, 0);
         registerEventValue(MessageSendEvent.class, Player.class, new Getter<Player, MessageSendEvent>() {
             @Override
             public Player get(MessageSendEvent event) {
