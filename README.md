@@ -7,6 +7,5 @@ VoiceChat API
 Addon Recommendation
 Cinematic
 Watermark
-Disable certain addons
 Events
 ```
