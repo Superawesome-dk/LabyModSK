@@ -4,21 +4,23 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.labymod.serverapi.bukkit.LabyModPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-public class ActioMenu extends Effect {
-    private Expression<Player> player;
+public class ActionMenu extends Effect {
     private Expression<String> ActionMenu;
+    private Expression<Player> player;
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        this.player = (Expression<Player>) expressions[0];
-        this.ActionMenu = (Expression<String>) expressions[1];
+        this.ActionMenu = (Expression<String>) expressions[0];
+        this.player = (Expression<Player>) expressions[1];
         return true;
     }
     @Override
@@ -28,12 +30,13 @@ public class ActioMenu extends Effect {
 
     @Override
     protected void execute(Event event) {
-        /*JsonArray array = new JsonArray();
-        for (String string : ActionMenu.getArray(event))
-
+        Gson gson = new Gson();
+        JsonArray menu = new JsonArray();
+        for (String actionEntry : ActionMenu.getArray(event)) {
+            JsonObject convertedactionEntry = gson.fromJson(actionEntry, JsonObject.class);
+            menu.add(convertedactionEntry);
+        }
         for (Player player : player.getArray(event))
-            LabyModPlugin.getInstance().sendServerMessage(player, "discord_rpc", obj);
-
-         */
+            LabyModPlugin.getInstance().sendServerMessage( player, "user_menu_actions", menu );
     }
 }

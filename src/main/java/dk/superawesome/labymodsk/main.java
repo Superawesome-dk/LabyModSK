@@ -12,13 +12,13 @@ import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Getter;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import dk.superawesome.labymodsk.Expression.ActionEntry;
 import dk.superawesome.labymodsk.Expression.ExprNpcFromID;
 import dk.superawesome.labymodsk.classes.MessageKey;
 import dk.superawesome.labymodsk.classes.ModVersion;
 import dk.superawesome.labymodsk.commands.labymodsk;
 import dk.superawesome.labymodsk.effects.*;
 import net.citizensnpcs.api.npc.NPC;
-import net.labymod.serverapi.Addon;
 import net.labymod.serverapi.bukkit.event.LabyModPlayerJoinEvent;
 import net.labymod.serverapi.bukkit.event.MessageReceiveEvent;
 import net.labymod.serverapi.bukkit.event.MessageSendEvent;
@@ -52,8 +52,10 @@ public final class main extends JavaPlugin {
         Skript.registerEffect(PlayingNow.class, "set playing now for %players% to %string%");
         Skript.registerEffect(Subtitles.class, "set subtitles for %players% to %string% [with size %number%] for %players%");
         Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
+        Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
         Skript.registerEffect(Cinescopes.class, "show cinescop with coverage %number% in %number% seconds to %players%");
-        //Skript.registerExpression(ActionMenu.class, String.class, ExpressionType.COMBINED, "[the] action menu of %players%");
+        Skript.registerEffect(ActionMenu.class, "show actionmenu %strings% to %players%");
+        Skript.registerExpression(ActionEntry.class, String.class, ExpressionType.COMBINED, "[the] action entry with displayname %string% and type %string% and value %string%");
         Skript.registerEvent("labymod permissionsend", SimpleEvent.class, PermissionsSendEvent.class, "labymod permissionsend");
         /*registerEventValue(PermissionsSendEvent.class, OfflinePlayer.class, new Getter<OfflinePlayer, PermissionsSendEvent>() {
             @Override
