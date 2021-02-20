@@ -36,7 +36,7 @@ dependencies {
     }
     compileOnly 'org.jetbrains:annotations:20.1.0'
     implementation (group: 'net.citizensnpcs', name: 'citizensapi', version: '2.0.27-SNAPSHOT')
-    compile files('/libs/build-1.0-SNAPSHOT.jar')
+    implementation files('/libs/build-1.0-SNAPSHOT.jar')
 }
 
 processResources {
