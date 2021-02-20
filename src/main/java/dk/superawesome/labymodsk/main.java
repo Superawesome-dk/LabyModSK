@@ -17,6 +17,7 @@ import com.google.gson.JsonObject;
 import dk.superawesome.labymodsk.Expression.ActionEntry;
 import dk.superawesome.labymodsk.Expression.ExprNpcFromID;
 import dk.superawesome.labymodsk.Expression.Subtitle;
+import dk.superawesome.labymodsk.Expression.point;
 import dk.superawesome.labymodsk.classes.addons;
 import dk.superawesome.labymodsk.classes.MessageKey;
 import dk.superawesome.labymodsk.classes.ModVersion;
@@ -43,7 +44,6 @@ public final class main extends JavaPlugin {
     public void onEnable() {
         registerClasses();
 
-
         instance = this;
         addonInstance = Skript.registerAddon(instance);
         if(Bukkit.getPluginManager().getPlugin("Citizens") != null) {
@@ -52,6 +52,8 @@ public final class main extends JavaPlugin {
             Skript.registerEffect(NPCemoji.class, "play emoji for %citizen% to %number% for %players%");
             Skript.registerEffect(NPCsticker.class, "play sticker for %citizen% to %number% for %players%");
         }
+        Skript.registerExpression(point.class, String.class, ExpressionType.COMBINED, "[the] point at %location% with tilt %number%");
+        Skript.registerEffect(Cinematic.class, "show cinematic %strings% in %number% seconds to %players%");
         Skript.registerEffect(InputPrompt.class, "show input prompt with id %number% and message %string% and value %string% and placeholder %string% and max length %number% to %players%");
         Skript.registerEffect(DiscordRich.class, "set discord rich for %players% to %string%");
         Skript.registerEffect(PlayingNow.class, "set playing now for %players% to %string%");

@@ -14,7 +14,6 @@ public class Cinescopes extends Effect {
     private Expression<Player> player;
     private Expression<Integer> coverage;
     private Expression<Long> duration;
-    private long duration2;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -33,7 +32,7 @@ public class Cinescopes extends Effect {
     protected void execute(Event event) {
         JsonObject object = new JsonObject();
         object.addProperty( "coverage", coverage.getSingle(event) );
-        duration2 = duration.getSingle(event) * 1000;
+        long duration2 = duration.getSingle(event) * 1000;
         object.addProperty( "duration", duration2);
         for (Player player : player.getArray(event))
             LabyModPlugin.getInstance().sendServerMessage( player, "cinescopes", object );
