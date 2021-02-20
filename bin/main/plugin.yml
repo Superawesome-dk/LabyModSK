@@ -1,8 +1,0 @@
-name: LabymodSK
-version: @version@
-main: dk.superawesome.labymodsk.main
-load: STARTUP
-commands:
-  labymodsk:
-    description: "Labymod kommand til at spawn npc"
-    usage: /labymod

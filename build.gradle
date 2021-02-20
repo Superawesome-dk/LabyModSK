@@ -25,7 +25,7 @@ repositories {
         url 'https://repo.destroystokyo.com/repository/maven-public/'
     }
     maven {
-        url 'http://repo.citizensnpcs.co/'
+        url 'https://repo.citizensnpcs.co/'
     }
 }
 
