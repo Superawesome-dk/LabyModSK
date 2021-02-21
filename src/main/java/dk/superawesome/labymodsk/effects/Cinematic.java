@@ -13,7 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-public class Cinematic  extends Effect {
+public class Cinematic extends Effect {
     private Expression<Player> targets;
     private Expression<Long> duration;
     private Expression<String> points;
