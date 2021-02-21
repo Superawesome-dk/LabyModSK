@@ -22,6 +22,7 @@ import dk.superawesome.labymodsk.commands.labymodsk;
 import dk.superawesome.labymodsk.effects.*;
 import net.citizensnpcs.api.npc.NPC;
 import net.labymod.serverapi.Addon;
+import net.labymod.serverapi.Permission;
 import net.labymod.serverapi.bukkit.event.LabyModPlayerJoinEvent;
 import net.labymod.serverapi.bukkit.event.MessageReceiveEvent;
 import net.labymod.serverapi.bukkit.event.MessageSendEvent;
@@ -30,6 +31,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 import static ch.njol.skript.registrations.EventValues.registerEventValue;
 
@@ -67,6 +70,17 @@ public final class main extends JavaPlugin {
             @Override
             public Player get(PermissionsSendEvent event) {
                 return event.getPlayer();
+            }
+        }, 0);
+        registerEventValue(PermissionsSendEvent.class, String.class, new Getter<String, PermissionsSendEvent>() {
+            @Override
+            public String get(PermissionsSendEvent event) {
+                JsonObject permissionList = new JsonObject();
+                for (Map.Entry<Permission, Boolean> entry : event.getPermissions().entrySet()) {
+                    permissionList.addProperty(entry.getKey().getDisplayName(), entry.getValue().booleanValue());
+                }
+                Gson gson = new Gson();
+                return gson.fromJson(permissionList, JsonObject.class).toString();
             }
         }, 0);
         Skript.registerEvent("labymod join", SimpleEvent.class, LabyModPlayerJoinEvent.class, "labymod join");

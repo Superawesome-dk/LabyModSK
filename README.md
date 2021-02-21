@@ -5,5 +5,4 @@ LabyMod is a skript addon that can integrate with the LabyMod client.
 ```
 VoiceChat API
 Watermark
-Events
 ```
