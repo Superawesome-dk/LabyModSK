@@ -48,13 +48,15 @@ public final class main extends JavaPlugin {
         if(Bukkit.getPluginManager().getPlugin("Citizens") != null) {
             this.getCommand("labymodsk").setExecutor(new labymodsk());
             Skript.registerExpression(ExprNpcFromID.class, NPC.class, ExpressionType.COMBINED, "[the] (npc|citizen) (of|from|with id) %number%");
-            Skript.registerEffect(NPCemoji.class, "play emoji for %citizen% to %number% for %players%");
-            Skript.registerEffect(NPCsticker.class, "play sticker for %citizen% to %number% for %players%");
+            Skript.registerExpression(ExprNPCemoji.class, String.class, ExpressionType.COMBINED, "emoji for %citizen% with emojiid %number%");
+            Skript.registerEffect(NPCemoji.class, "show emojis %strings% for %players%");
+            Skript.registerExpression(ExprNPCemoji.class, String.class, ExpressionType.COMBINED, "sticker for %citizen% with stickerid %number%");
+            Skript.registerEffect(NPCsticker.class, "show stickers %strings% for %players%");
         }
         Skript.registerExpression(AddonEntry.class, String.class, ExpressionType.COMBINED, "[the] addon with uuid %string% and required %boolean%");
         Skript.registerEffect(recommendAddons.class, "show addon recommendation with addons %strings% to %players%");
         Skript.registerExpression(point.class, String.class, ExpressionType.COMBINED, "[the] point at %location% with tilt %number%");
-        Skript.registerEffect(Cinematic.class, "show cinematic %strings% in %number% seconds to %players%");
+        Skript.registerEffect(Cinematic.class, "show cinematic %strings% in %timespan% to %players%");
         Skript.registerEffect(InputPrompt.class, "show input prompt with id %number% and message %string% and value %string% and placeholder %string% and max length %number% to %players%");
         Skript.registerEffect(DiscordRich.class, "set discord rich for %players% to %string%");
         Skript.registerEffect(PlayingNow.class, "set playing now for %players% to %string%");
@@ -62,7 +64,7 @@ public final class main extends JavaPlugin {
         Skript.registerEffect(Subtitles.class, "show subtitles %strings% for %players%");
         Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
         Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
-        Skript.registerEffect(Cinescopes.class, "show cinescop with coverage %number% in %number% seconds to %players%");
+        Skript.registerEffect(Cinescopes.class, "show cinescop with coverage %number% in %timespan% to %players%");
         Skript.registerEffect(ActionMenu.class, "show actionmenu %strings% to %players%");
         Skript.registerExpression(ActionEntry.class, String.class, ExpressionType.COMBINED, "[the] action entry with displayname %string% and type %string% and value %string%");
         Skript.registerEvent("labymod permissionsend", SimpleEvent.class, PermissionsSendEvent.class, "labymod permissionsend");

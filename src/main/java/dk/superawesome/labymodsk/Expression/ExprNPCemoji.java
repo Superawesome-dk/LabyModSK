@@ -1,19 +1,20 @@
 package dk.superawesome.labymodsk.Expression;
 
+import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-public class point extends SimpleExpression<String> {
-    private Expression<Location> location;
-    private Expression<Integer> tilt;
+public class ExprNPCemoji extends SimpleExpression<String> {
+    private Expression<NPC> npc;
+    private Expression<Number> emoji;
 
     public Class<? extends String> getReturnType() {
         return String.class;
@@ -27,8 +28,8 @@ public class point extends SimpleExpression<String> {
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] e, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parser) {
-        this.location = (Expression<Location>) e[0];
-        this.tilt = (Expression<Integer>) e[1];
+        this.npc = (Expression<NPC>) e[0];
+        this.emoji = (Expression<Number>) e[1];
         return true;
     }
 
@@ -40,19 +41,15 @@ public class point extends SimpleExpression<String> {
     @Override
     @Nullable
     protected String[] get(Event event) {
-        JsonObject point = new JsonObject();
-        point.addProperty( "x", location.getSingle(event).getX() );
-        point.addProperty( "y",  location.getSingle(event).getY() );
-        point.addProperty( "z",  location.getSingle(event).getZ() );
-        point.addProperty( "yaw",  location.getSingle(event).getYaw() );
-        point.addProperty( "pitch",  location.getSingle(event).getPitch() );
-        if(tilt.getSingle(event) != null) {
-            point.addProperty( "tilt", tilt.getSingle(event) );
+        if(npc.getSingle(event) == null) {
+            Skript.error("The npc does not exist.");
         } else {
-            point.addProperty( "tilt", 0 );
+            JsonObject forcedEmote = new JsonObject();
+            forcedEmote.addProperty( "uuid", npc.getSingle(event).getUniqueId().toString());
+            forcedEmote.addProperty( "emote_id", emoji.getSingle(event) );
+            Gson gson = new Gson();
+            return new String[] {gson.fromJson(forcedEmote, JsonObject.class).toString()};
         }
-        Gson gson = new Gson();
-        return new String[] {gson.fromJson(point, JsonObject.class).toString()};
+        return new String[] {null};
     }
 }
-

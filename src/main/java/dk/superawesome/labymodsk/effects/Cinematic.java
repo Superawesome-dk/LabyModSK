@@ -3,6 +3,7 @@ package dk.superawesome.labymodsk.effects;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
+import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -15,14 +16,14 @@ import org.bukkit.event.Event;
 
 public class Cinematic extends Effect {
     private Expression<Player> targets;
-    private Expression<Long> duration;
+    private Expression<Timespan> duration;
     private Expression<String> points;
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         this.targets = (Expression<Player>) expressions[2];
-        this.duration = (Expression<Long>) expressions[1];
+        this.duration = (Expression<Timespan>) expressions[1];
         this.points = (Expression<String>) expressions[0];
         return true;
     }
@@ -40,14 +41,19 @@ public class Cinematic extends Effect {
             result.add(object);
         }
         JsonObject cinematic = new JsonObject();
-        cinematic.add( "points", result );
-        Long duration2 = duration.getSingle(event) * 1000;
-        cinematic.addProperty( "duration", duration2 );
-        for (Player player : targets.getArray(event)) {
-            JsonObject json = (JsonObject) result.get(0);
-            Location l = new Location(Bukkit.getPlayer(player.getUniqueId()).getWorld(), json.get("x").getAsDouble(), json.get("y").getAsDouble(), json.get("z").getAsDouble());
-            player.teleport(l);
-            LabyModPlugin.getInstance().sendServerMessage( player, "cinematic", cinematic );
+        if(result.size() != 0) {
+            cinematic.add( "points", result );
+            cinematic.addProperty( "duration", duration.getSingle(event).getMilliSeconds() );
+            for (Player player : targets.getArray(event)) {
+                JsonObject json = (JsonObject) result.get(0);
+                Location l = new Location(Bukkit.getPlayer(player.getUniqueId()).getWorld(), json.get("x").getAsDouble(), json.get("y").getAsDouble(), json.get("z").getAsDouble());
+                player.teleport(l);
+                LabyModPlugin.getInstance().sendServerMessage( player, "cinematic", cinematic );
+            }
+        } else {
+            for (Player player : targets.getArray(event)) {
+                player.sendMessage("Contact the server owner!");
+            }
         }
     }
 }
