@@ -39,7 +39,6 @@ public class recommendAddons extends Effect {
         }
         JsonObject object = new JsonObject();
         object.add("addons", sendAddons);
-        Bukkit.broadcastMessage(object.toString());
         for (Player player : targets.getArray(event)) {
             LabyModPlugin.getInstance().sendServerMessage( player, "addon_recommendation", object );
         }

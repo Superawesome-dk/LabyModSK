@@ -44,13 +44,19 @@ public final class main extends JavaPlugin {
     public void onEnable() {
         registerClasses();
         instance = this;
+        /*
+            - sendSettings
+            - Display the party in Discord
+            - Send the secrets to the client
+            - Permissions
+         */
         addonInstance = Skript.registerAddon(instance);
         if(Bukkit.getPluginManager().getPlugin("Citizens") != null) {
             this.getCommand("labymodsk").setExecutor(new labymodsk());
             Skript.registerExpression(ExprNpcFromID.class, NPC.class, ExpressionType.COMBINED, "[the] (npc|citizen) (of|from|with id) %number%");
             Skript.registerExpression(ExprNPCemoji.class, String.class, ExpressionType.COMBINED, "emoji for %citizen% with emojiid %number%");
             Skript.registerEffect(NPCemoji.class, "show emojis %strings% to %players%");
-            Skript.registerExpression(ExprNPCemoji.class, String.class, ExpressionType.COMBINED, "sticker for %citizen% with stickerid %number%");
+            Skript.registerExpression(ExprNPCsticker.class, String.class, ExpressionType.COMBINED, "sticker for %citizen% with stickerid %number%");
             Skript.registerEffect(NPCsticker.class, "show stickers %strings% to %players%");
         }
         Skript.registerExpression(AddonEntry.class, String.class, ExpressionType.COMBINED, "[the] addon with uuid %string% and required %boolean%");
@@ -63,13 +69,12 @@ public final class main extends JavaPlugin {
         Skript.registerExpression(Subtitle.class, String.class, ExpressionType.COMBINED, "[the] subtitle for %players%[ and value %-string%][ and size %-number%]");
         Skript.registerEffect(Subtitles.class, "show subtitles %strings% for %players%");
         Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
-        Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
         Skript.registerEffect(Cinescopes.class, "show cinescope with coverage %number% in %timespan% to %players%");
         Skript.registerEffect(EnableVoicechat.class, "enable voicechat for %players%");
         Skript.registerEffect(DisableVoicechat.class, "disable voicechat for %players%");
         Skript.registerEffect(muteplayer.class, "voicechat mute %players% for %players%");
         Skript.registerEffect(unmuteplayer.class, "voicechat unmute %players% for %players%");
-        Skript.registerEffect(ActionMenu.class, "show actionmenu %strings%(to %players%");
+        Skript.registerEffect(ActionMenu.class, "show actionmenu %strings% to %players%");
         Skript.registerExpression(ActionEntry.class, String.class, ExpressionType.COMBINED, "[the] action entry with displayname %string% and type %string% and value %string%");
         Skript.registerEvent("labymod permissionsend", SimpleEvent.class, PermissionsSendEvent.class, "labymod permissionsend");
         registerEventValue(PermissionsSendEvent.class, Player.class, new Getter<Player, PermissionsSendEvent>() {
