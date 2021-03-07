@@ -44,11 +44,6 @@ public final class main extends JavaPlugin {
     public void onEnable() {
         registerClasses();
         instance = this;
-        /*
-            - sendSettings
-            - Display the party in Discord
-            - Send the secrets to the client
-         */
         addonInstance = Skript.registerAddon(instance);
         if(Bukkit.getPluginManager().getPlugin("Citizens") != null) {
             this.getCommand("labymodsk").setExecutor(new labymodsk());
@@ -58,25 +53,49 @@ public final class main extends JavaPlugin {
             Skript.registerExpression(ExprNPCsticker.class, String.class, ExpressionType.COMBINED, "sticker for %citizen% with stickerid %number%");
             Skript.registerEffect(NPCsticker.class, "show stickers %strings% to %players%");
         }
+
+        // permissions
         Skript.registerExpression(ExprPermission.class, String.class, ExpressionType.COMBINED, "[the] permission %string% with boolean %boolean%");
         Skript.registerEffect(Permissions.class, "send permissions %strings% to %players%");
+
+        // addons
         Skript.registerExpression(AddonEntry.class, String.class, ExpressionType.COMBINED, "[the] addon with uuid %string% and required %boolean%");
         Skript.registerEffect(recommendAddons.class, "show addon recommendation with addons %strings% to %players%");
+
+        // cinematic
         Skript.registerExpression(point.class, String.class, ExpressionType.COMBINED, "[the] point at %location% with tilt %number%");
         Skript.registerEffect(Cinematic.class, "show cinematic %strings% in %timespan% to %players%");
+
+        // cinescope
+        Skript.registerEffect(Cinescopes.class, "show cinescope with coverage %number% in %timespan% to %players%");
+
+        //input prompt
         Skript.registerEffect(InputPrompt.class, "show input prompt with id %number% and message %string% and value %string% and placeholder %string% and max length %number% to %players%");
-        Skript.registerEffect(DiscordRich.class, "set discord rich for %players% to %string%");
+
+        //discord rich
+        Skript.registerEffect(DiscordRich.class, "set discord rich for %players% to %string%[ with (starttime %-timespan%|endtime %-timespan%)]");
+        Skript.registerEffect(DiscordParty.class, "send discord party with id %string% and size %number% and max %number% to %players%");
+        Skript.registerEffect(DiscordGame.class, "send discord match [with matchsecret %string% and spectatesecret %string% and joinsecret %string%] to %players%");
+
+        // playing now
         Skript.registerEffect(PlayingNow.class, "set playing now for %players% to %string%");
+
+        // subtitles
         Skript.registerExpression(Subtitle.class, String.class, ExpressionType.COMBINED, "[the] subtitle for %players%[ and value %-string%][ and size %-number%]");
         Skript.registerEffect(Subtitles.class, "show subtitles %strings% for %players%");
+
+        // economy display
         Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
-        Skript.registerEffect(Cinescopes.class, "show cinescope with coverage %number% in %timespan% to %players%");
 
         // voicechat
         Skript.registerEffect(EnableVoicechat.class, "enable voicechat for %players%");
         Skript.registerEffect(DisableVoicechat.class, "disable voicechat for %players%");
         Skript.registerEffect(muteplayer.class, "voicechat mute %players% for %players%");
         Skript.registerEffect(unmuteplayer.class, "voicechat unmute %players% for %players%");
+        Skript.registerExpression(ExprVoicesetting.class, String.class, ExpressionType.COMBINED, "setting %string% with value (%-number%|%-boolean%)");
+        Skript.registerEffect(requiredsettings.class, "send required voicechat settings %strings% for %players%");
+        Skript.registerEffect(voicechatsettings.class, "send voicechat settings %strings% for %players%");
+
         // actionmenu
         Skript.registerEffect(ActionMenu.class, "show actionmenu %strings% to %players%");
         Skript.registerExpression(ActionEntry.class, String.class, ExpressionType.COMBINED, "[the] action entry with displayname %string% and type %string% and value %string%");

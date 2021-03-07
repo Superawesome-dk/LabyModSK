@@ -3,29 +3,21 @@ package dk.superawesome.labymodsk.effects;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import com.google.gson.JsonObject;
 import net.labymod.serverapi.bukkit.LabyModPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+import java.util.UUID;
 
-public class DiscordRich extends Effect {
+public class DiscordGame  extends Effect {
     private Expression<Player> player;
-    private Expression<String> displayname;
-    private Expression<Timespan> starttime;
-    private Long starttime2 = 0L;
-    private Expression<Timespan> endtime;
-    private Long endtime2 = 0L;
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         this.player = (Expression<Player>) expressions[0];
-        this.displayname = (Expression<String>) expressions[1];
-        this.starttime = (Expression<Timespan>) expressions[2];
-        this.endtime = (Expression<Timespan>) expressions[3];
         return true;
     }
     @Override
@@ -35,18 +27,17 @@ public class DiscordRich extends Effect {
 
     @Override
     protected void execute(Event event) {
-        if(starttime != null) {
-            starttime2 = System.currentTimeMillis() - starttime.getSingle(event).getMilliSeconds();
-        }
-        if(endtime != null) {
-            endtime2 = System.currentTimeMillis() + endtime.getSingle(event).getMilliSeconds();
-        }
         JsonObject obj = new JsonObject();
-        obj.addProperty( "hasGame", true );
-        obj.addProperty( "game_mode", displayname.getSingle(event) );
-        obj.addProperty( "game_startTime", starttime2);
-        obj.addProperty( "game_endTime", endtime2 );
+        String domain = "superawesome.dk";
+        addSecret( obj, "hasMatchSecret", "matchSecret", UUID.randomUUID().toString(), domain );
+        addSecret( obj, "hasSpectateSecret", "spectateSecret", UUID.randomUUID().toString(), domain );
+        addSecret( obj, "hasJoinSecret", "joinSecret", UUID.randomUUID().toString(), domain );
         for (Player player : player.getArray(event))
             LabyModPlugin.getInstance().sendServerMessage(player, "discord_rpc", obj);
+    }
+    public JsonObject addSecret(JsonObject jsonObject, String hasKey, String key, String secret, String domain) {
+        jsonObject.addProperty( hasKey, true );
+        jsonObject.addProperty( key, secret.toString() + ":" + domain );
+        return jsonObject;
     }
 }
