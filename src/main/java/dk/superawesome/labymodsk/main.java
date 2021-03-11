@@ -75,7 +75,7 @@ public final class main extends JavaPlugin {
         //discord rich
         Skript.registerEffect(DiscordRich.class, "set discord rich for %players% to %string%[ with (starttime %-timespan%|endtime %-timespan%)]");
         Skript.registerEffect(DiscordParty.class, "send discord party with id %string% and size %number% and max %number% to %players%");
-        Skript.registerEffect(DiscordGame.class, "send discord match [with matchsecret %string% and spectatesecret %string% and joinsecret %string%] to %players%");
+        Skript.registerEffect(DiscordGame.class, "send discord match [with matchsecret %-string% and spectatesecret %-string% and joinsecret %-string%] to %players%");
 
         // playing now
         Skript.registerEffect(PlayingNow.class, "set playing now for %players% to %string%");
