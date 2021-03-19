@@ -96,6 +96,8 @@ public final class main extends JavaPlugin {
         Skript.registerEffect(requiredsettings.class, "send required voicechat settings %strings% for %players%");
         Skript.registerEffect(voicechatsettings.class, "send voicechat settings %strings% for %players%");
 
+        Skript.registerEffect(EnableWatermark.class, "enable watermark for %players%");
+        Skript.registerEffect(DisableVoicechat.class, "disable watermark for %players%");
         // actionmenu
         Skript.registerEffect(ActionMenu.class, "show actionmenu %strings% to %players%");
         Skript.registerExpression(ActionEntry.class, String.class, ExpressionType.COMBINED, "[the] action entry with displayname %string% and type %string% and value %string%");
