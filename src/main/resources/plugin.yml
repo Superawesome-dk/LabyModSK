@@ -1,7 +1,7 @@
-name: LabymodSK
-version: @version@
-main: dk.superawesome.labymodsk.main
-load: STARTUP
+name: LabyModSK
+version: ${project.version}
+main: dk.superawesome.labymodsk.LabyModSK
+api-version: 1.16
 depend: [Skript, LabyModAPI]
 softdepend: [Citizens]
 commands:

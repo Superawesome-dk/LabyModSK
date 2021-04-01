@@ -36,8 +36,8 @@ import java.util.Map;
 
 import static ch.njol.skript.registrations.EventValues.registerEventValue;
 
-public final class main extends JavaPlugin {
-    public static main instance;
+public final class LabyModSK extends JavaPlugin {
+    public static LabyModSK instance;
     public static SkriptAddon addonInstance;
 
     @Override
@@ -188,13 +188,13 @@ public final class main extends JavaPlugin {
                 return gson.fromJson(event.getJsonElement(), JsonElement.class).toString();
             }
         }, 0);
+
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
     }
-
     public void registerClasses() {
         if(Bukkit.getPluginManager().getPlugin("Citizens") != null) {
             Classes.registerClass(new ClassInfo<NPC>(NPC.class, "citizen")
