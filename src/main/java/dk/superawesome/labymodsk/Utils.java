@@ -7,6 +7,6 @@ public class Utils {
         if(input != null) {
             return ChatColor.translateAlternateColorCodes('&', input);
         }
-        return "Fejl ved farveloading";
+        return null;
     }
 }
