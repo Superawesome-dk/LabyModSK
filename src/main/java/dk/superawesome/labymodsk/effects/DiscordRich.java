@@ -6,7 +6,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -47,6 +47,6 @@ public class DiscordRich extends Effect {
         obj.addProperty( "game_startTime", starttime2);
         obj.addProperty( "game_endTime", endtime2 );
         for (Player player : player.getArray(event))
-            LabyModPlugin.getInstance().sendServerMessage(player, "discord_rpc", obj);
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "discord_rpc", obj);
     }
 }

@@ -7,7 +7,7 @@ import ch.njol.util.Kleenean;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -40,7 +40,7 @@ public class recommendAddons extends Effect {
         JsonObject object = new JsonObject();
         object.add("addons", sendAddons);
         for (Player player : targets.getArray(event)) {
-            LabyModPlugin.getInstance().sendServerMessage( player, "addon_recommendation", object );
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "addon_recommendation", object );
         }
     }
 }
