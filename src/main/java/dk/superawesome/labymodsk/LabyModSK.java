@@ -4,36 +4,39 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
-import ch.njol.skript.classes.Serializer;
 import ch.njol.skript.expressions.base.EventValueExpression;
+import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.Classes;
+import ch.njol.skript.registrations.Converters;
 import ch.njol.skript.util.Getter;
-import ch.njol.yggdrasil.Fields;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import dk.superawesome.labymodsk.Expression.*;
-import dk.superawesome.labymodsk.classes.MessageKey;
-import dk.superawesome.labymodsk.classes.ModVersion;
-import dk.superawesome.labymodsk.classes.addons;
+import dk.superawesome.labymodsk.classes.*;
 import dk.superawesome.labymodsk.commands.labymodsk;
 import dk.superawesome.labymodsk.effects.*;
 import net.citizensnpcs.api.npc.NPC;
 import net.labymod.serverapi.api.extension.AddonExtension;
+import net.labymod.serverapi.api.extension.ModificationExtension;
+import net.labymod.serverapi.api.extension.PackageExtension;
 import net.labymod.serverapi.bukkit.event.BukkitLabyModPlayerLoginEvent;
 import net.labymod.serverapi.bukkit.event.BukkitMessageReceiveEvent;
-import net.labymod.serverapi.common.extension.DefaultAddonExtension;
+import org.apache.commons.lang.ArrayUtils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static ch.njol.skript.registrations.EventValues.registerEventValue;
 
@@ -118,10 +121,46 @@ public final class LabyModSK extends JavaPlugin {
                 return new ModVersion(event.getVersion());
             }
         }, 0);
-        registerEventValue(BukkitLabyModPlayerLoginEvent.class, AddonExtension[].class, new Getter<AddonExtension[], BukkitLabyModPlayerLoginEvent>() {
+        registerEventValue(BukkitLabyModPlayerLoginEvent.class, addons.class, new Getter<addons, BukkitLabyModPlayerLoginEvent>() {
             @Override
-            public AddonExtension[] get(BukkitLabyModPlayerLoginEvent event) {
-                return event.getAddonExtensions().toArray(new AddonExtension[event.getAddonExtensions().size()]);
+            public addons get(BukkitLabyModPlayerLoginEvent event) {
+                JsonArray addonList = new JsonArray();
+                for (AddonExtension addon : event.getAddonExtensions()) {
+                    JsonObject addonIndex = new JsonObject();
+                    addonIndex.addProperty("uuid", String.valueOf(addon.getIdentifier()));
+                    addonIndex.addProperty("name", addon.getName());
+                    addonList.add(addonIndex);
+                }
+                Gson gson = new Gson();
+                return new addons(gson.fromJson(addonList, JsonArray.class).toString());
+            }
+        }, 0);
+        registerEventValue(BukkitLabyModPlayerLoginEvent.class, mods.class, new Getter<mods, BukkitLabyModPlayerLoginEvent>() {
+            @Override
+            public mods get(BukkitLabyModPlayerLoginEvent event) {
+                JsonArray addonList = new JsonArray();
+                for (ModificationExtension mod : event.getModificationExtensions()) {
+                    JsonObject addonIndex = new JsonObject();
+                    addonIndex.addProperty("uuid", String.valueOf(mod.getIdentifier()));
+                    addonIndex.addProperty("name", mod.getName());
+                    addonList.add(addonIndex);
+                }
+                Gson gson = new Gson();
+                return new mods(gson.fromJson(addonList, JsonArray.class).toString());
+            }
+        }, 0);
+        registerEventValue(BukkitLabyModPlayerLoginEvent.class, packages.class, new Getter<packages, BukkitLabyModPlayerLoginEvent>() {
+            @Override
+            public packages get(BukkitLabyModPlayerLoginEvent event) {
+                JsonArray addonList = new JsonArray();
+                for (PackageExtension mod : event.getPackageExtensions()) {
+                    JsonObject addonIndex = new JsonObject();
+                    addonIndex.addProperty("uuid", String.valueOf(mod.getIdentifier()));
+                    addonIndex.addProperty("name", mod.getName());
+                    addonList.add(addonIndex);
+                }
+                Gson gson = new Gson();
+                return new packages(gson.fromJson(addonList, JsonArray.class).toString());
             }
         }, 0);
         Skript.registerEvent("labymod message receive", SimpleEvent.class, BukkitMessageReceiveEvent.class, "labymod message receive");
@@ -152,77 +191,6 @@ public final class LabyModSK extends JavaPlugin {
         // Plugin shutdown logic
     }
     public void registerClasses() {
-        Classes.registerClass(new ClassInfo<>(AddonExtension[].class, "addonextension")
-                .user("addonextension")
-                .name("Addonextension")
-                .description("Represents a raid from a pillager raid on a village.")
-                .examples("on raid start:", "\tbroadcast \"A raid has started at level %omen level of event-raid%\"")
-                .defaultExpression(new EventValueExpression<>(AddonExtension[].class))
-                .parser(new Parser<AddonExtension[]>() {
-
-                    @Override
-                    public AddonExtension[] parse(String input, ParseContext context) {
-                        return null;
-                    }
-
-                    @Override
-                    public boolean canParse(ParseContext context) {
-                        return false;
-                    }
-
-                    @Override
-                    public String toVariableNameString(AddonExtension[] raid) {
-                        System.out.println("variablename");
-                        return "addonextension";
-                    }
-
-                    @Override
-                    public String getVariableNamePattern() {
-                        System.out.println("namepattern");
-                        return ".+";
-                    }
-
-                    @Override
-                    public String toString(AddonExtension[] addon, int flags) {
-                        System.out.println("tostring");
-                        return "array";
-                    }
-                })
-        );
-        Classes.registerClass(new ClassInfo<>(DefaultAddonExtension.class, "defaultaddonextension")
-                .user("defaultaddonextension")
-                .name("Defaultaddonextension")
-                .description("Represents a raid from a pillager raid on a village.")
-                .examples("on raid start:", "\tbroadcast \"A raid has started at level %omen level of event-raid%\"")
-                .defaultExpression(new EventValueExpression<>(DefaultAddonExtension.class))
-                .parser(new Parser<DefaultAddonExtension>() {
-
-                    @Override
-                    public DefaultAddonExtension parse(String input, ParseContext context) {
-                        return null;
-                    }
-
-                    @Override
-                    public boolean canParse(ParseContext context) {
-                        return false;
-                    }
-
-                    @Override
-                    public String toVariableNameString(DefaultAddonExtension raid) {
-                        return "addonextension";
-                    }
-
-                    @Override
-                    public String getVariableNamePattern() {
-                        return "addon";
-                    }
-
-                    @Override
-                    public String toString(DefaultAddonExtension addon, int flags) {
-                        return String.valueOf(addon.getIdentifier());
-                    }
-                })
-        );
         if(Bukkit.getPluginManager().getPlugin("Citizens") != null) {
             Classes.registerClass(new ClassInfo<NPC>(NPC.class, "citizen")
                     .name("npc")
@@ -326,6 +294,60 @@ public final class LabyModSK extends JavaPlugin {
 
                     @Override
                     public String toVariableNameString(addons arg0) {
+                        return arg0.toString();
+                    }
+
+                }));
+        Classes.registerClass(new ClassInfo<>(mods.class, "mods")
+                .defaultExpression(new EventValueExpression<>(mods.class))
+                .user("mods")
+                .name("mods")
+                .parser(new Parser<mods>() {
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+
+                    @Override
+                    public mods parse(String arg0, ParseContext arg1) {
+                        return null;
+                    }
+
+                    @Override
+                    public String toString(mods arg0, int arg1) {
+                        return arg0.toString();
+                    }
+
+                    @Override
+                    public String toVariableNameString(mods arg0) {
+                        return arg0.toString();
+                    }
+
+                }));
+        Classes.registerClass(new ClassInfo<>(packages.class, "packages")
+                .defaultExpression(new EventValueExpression<>(packages.class))
+                .user("packages")
+                .name("packages")
+                .parser(new Parser<packages>() {
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+
+                    @Override
+                    public packages parse(String arg0, ParseContext arg1) {
+                        return null;
+                    }
+
+                    @Override
+                    public String toString(packages arg0, int arg1) {
+                        return arg0.toString();
+                    }
+
+                    @Override
+                    public String toVariableNameString(packages arg0) {
                         return arg0.toString();
                     }
 
