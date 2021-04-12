@@ -5,7 +5,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -42,7 +42,7 @@ public class DiscordGame  extends Effect {
         addSecret( obj, "hasSpectateSecret", "spectateSecret", spectatsecret != null ? spectatsecret.getSingle(event) : spectatsecret2, domain );
         addSecret( obj, "hasJoinSecret", "joinSecret", matchsecret != null ? joinsecret.getSingle(event) : joinsecret2, domain );
         for (Player player : player.getArray(event))
-            LabyModPlugin.getInstance().sendServerMessage(player, "discord_rpc", obj);
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "discord_rpc", obj);
     }
     public JsonObject addSecret(JsonObject jsonObject, String hasKey, String key, String secret, String domain) {
         jsonObject.addProperty( hasKey, true );

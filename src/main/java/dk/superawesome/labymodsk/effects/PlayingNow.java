@@ -5,7 +5,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -32,6 +32,6 @@ public class PlayingNow extends Effect {
         object.addProperty( "show_gamemode", true );
         object.addProperty( "gamemode_name", PlayingNow.getSingle(event) );
         for (Player player : player.getArray(event))
-            LabyModPlugin.getInstance().sendServerMessage(player, "server_gamemode", object);
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "server_gamemode", object);
     }
 }

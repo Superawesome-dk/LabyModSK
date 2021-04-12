@@ -5,7 +5,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -42,6 +42,6 @@ public class InputPrompt extends Effect {
         object.addProperty( "placeholder", placeholder.getSingle(event) );
         object.addProperty( "max_length", maxLength.getSingle(event) );
         for (Player player : player.getArray(event))
-            LabyModPlugin.getInstance().sendServerMessage( player, "input_prompt", object );
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "input_prompt", object );
     }
 }

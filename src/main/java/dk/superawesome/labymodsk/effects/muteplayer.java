@@ -5,7 +5,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -34,7 +34,7 @@ public class muteplayer extends Effect {
             JsonObject object = new JsonObject();
             object.add("mute_player", result);
             for (Player player : player.getArray(event))
-                LabyModPlugin.getInstance().sendServerMessage(player, "voicechat", object);
+                LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "voicechat", object);
         }
     }
 }

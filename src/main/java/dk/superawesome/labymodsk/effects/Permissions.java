@@ -7,8 +7,7 @@ import ch.njol.util.Kleenean;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
-import org.bukkit.Bukkit;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -41,7 +40,7 @@ public class Permissions extends Effect {
             }
         }
         for (Player player : targets.getArray(event)) {
-            LabyModPlugin.getInstance().sendServerMessage( player, "PERMISSIONS", permissionsObject);
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "PERMISSIONS", permissionsObject);
         }
     }
 }

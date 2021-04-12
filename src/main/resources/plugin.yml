@@ -2,7 +2,7 @@ name: LabyModSK
 version: ${project.version}
 main: dk.superawesome.labymodsk.LabyModSK
 api-version: 1.16
-depend: [Skript, LabyModAPI]
+depend: [Skript, LabyApi]
 softdepend: [Citizens]
 commands:
   labymodsk:

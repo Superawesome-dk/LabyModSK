@@ -1,6 +1,5 @@
 package dk.superawesome.labymodsk.effects;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -8,15 +7,9 @@ import ch.njol.util.Kleenean;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.npc.NPCRegistry;
-import net.labymod.serverapi.LabyModAPI;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
-import org.bukkit.Bukkit;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.json.simple.parser.JSONParser;
 
 
 public class NPCemoji extends Effect {
@@ -45,6 +38,6 @@ public class NPCemoji extends Effect {
             array.add(forcedEmote);
         }
         for (Player player : player.getArray(event))
-            LabyModPlugin.getInstance().sendServerMessage(player, "emote_api", array);
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "emote_api", array);
     }
 }

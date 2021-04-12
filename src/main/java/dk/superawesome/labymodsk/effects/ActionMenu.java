@@ -7,8 +7,7 @@ import ch.njol.util.Kleenean;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
-import org.bukkit.Bukkit;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -37,6 +36,6 @@ public class ActionMenu extends Effect {
             menu.add(convertedactionEntry);
         }
         for (Player player : player.getArray(event))
-            LabyModPlugin.getInstance().sendServerMessage( player, "user_menu_actions", menu );
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "user_menu_actions", menu);
     }
 }
