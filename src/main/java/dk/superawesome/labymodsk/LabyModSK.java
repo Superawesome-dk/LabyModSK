@@ -5,20 +5,23 @@ import ch.njol.skript.SkriptAddon;
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.expressions.base.EventValueExpression;
-import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.Classes;
-import ch.njol.skript.registrations.Converters;
 import ch.njol.skript.util.Getter;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dk.superawesome.labymodsk.Expression.*;
+import dk.superawesome.labymodsk.Expression.player.ExprLabyAddons;
+import dk.superawesome.labymodsk.Expression.player.ExprLabyMods;
+import dk.superawesome.labymodsk.Expression.player.ExprLabyPackages;
+import dk.superawesome.labymodsk.Expression.player.ExprLabyVersion;
 import dk.superawesome.labymodsk.classes.*;
 import dk.superawesome.labymodsk.commands.labymodsk;
+import dk.superawesome.labymodsk.condition.CondUsingLabymod;
 import dk.superawesome.labymodsk.effects.*;
 import net.citizensnpcs.api.npc.NPC;
 import net.labymod.serverapi.api.extension.AddonExtension;
@@ -26,17 +29,11 @@ import net.labymod.serverapi.api.extension.ModificationExtension;
 import net.labymod.serverapi.api.extension.PackageExtension;
 import net.labymod.serverapi.bukkit.event.BukkitLabyModPlayerLoginEvent;
 import net.labymod.serverapi.bukkit.event.BukkitMessageReceiveEvent;
-import org.apache.commons.lang.ArrayUtils;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
-
-import java.lang.reflect.Array;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static ch.njol.skript.registrations.EventValues.registerEventValue;
 
@@ -101,8 +98,17 @@ public final class LabyModSK extends JavaPlugin {
         Skript.registerEffect(requiredsettings.class, "send required voicechat settings %strings% for %players%");
         Skript.registerEffect(voicechatsettings.class, "send voicechat settings %strings% for %players%");
 
+        // Laby player
+        Skript.registerCondition(CondUsingLabymod.class, "%player% is using labymod");
+        Skript.registerExpression(ExprLabyVersion.class, String.class, ExpressionType.COMBINED, "[the] labymod version of %player%");
+        Skript.registerExpression(ExprLabyAddons.class, String.class, ExpressionType.COMBINED, "[the] labymod addons of %player%");
+        Skript.registerExpression(ExprLabyMods.class, String.class, ExpressionType.COMBINED, "[the] labymod mods of %player%");
+        Skript.registerExpression(ExprLabyPackages.class, String.class, ExpressionType.COMBINED, "[the] labymod packages of %player%");
+
+        // watermark
         Skript.registerEffect(EnableWatermark.class, "enable watermark for %players%");
         Skript.registerEffect(DisableVoicechat.class, "disable watermark for %players%");
+
         // actionmenu
         Skript.registerEffect(ActionMenu.class, "show actionmenu %strings% to %players%");
         Skript.registerExpression(ActionEntry.class, String.class, ExpressionType.COMBINED, "[the] action entry with displayname %string% and type %string% and value %string%");
@@ -176,14 +182,13 @@ public final class LabyModSK extends JavaPlugin {
                 return new MessageKey(event.getMessageKey());
             }
         }, 0);
-        registerEventValue(BukkitMessageReceiveEvent.class, String.class, new Getter<String, BukkitMessageReceiveEvent>() {
+        registerEventValue(BukkitMessageReceiveEvent.class, messagecontent.class, new Getter<messagecontent, BukkitMessageReceiveEvent>() {
             @Override
-            public String get(BukkitMessageReceiveEvent event) {
+            public messagecontent get(BukkitMessageReceiveEvent event) {
                 Gson gson = new Gson();
-                return gson.fromJson(event.getMessageContent(), JsonElement.class).toString();
+                return new messagecontent(gson.fromJson(event.getMessageContent(), JsonElement.class).toString());
             }
         }, 0);
-
     }
 
     @Override
@@ -267,6 +272,33 @@ public final class LabyModSK extends JavaPlugin {
 
                     @Override
                     public String toVariableNameString(MessageKey arg0) {
+                        return arg0.toString();
+                    }
+
+                }));
+        Classes.registerClass(new ClassInfo<>(messagecontent.class, "messagecontent")
+                .defaultExpression(new EventValueExpression<>(messagecontent.class))
+                .user("messagecontent")
+                .name("messagecontent")
+                .parser(new Parser<messagecontent>() {
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+
+                    @Override
+                    public messagecontent parse(String arg0, ParseContext arg1) {
+                        return null;
+                    }
+
+                    @Override
+                    public String toString(messagecontent arg0, int arg1) {
+                        return arg0.toString();
+                    }
+
+                    @Override
+                    public String toVariableNameString(messagecontent arg0) {
                         return arg0.toString();
                     }
 
