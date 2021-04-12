@@ -5,7 +5,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -39,7 +39,7 @@ public class DiscordParty extends Effect {
         obj.addProperty( "party_size", size.getSingle(event) );
         obj.addProperty( "party_max", max.getSingle(event) );
         for (Player player : targets.getArray(event)) {
-            LabyModPlugin.getInstance().sendServerMessage( player, "discord_rpc", obj );
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "discord_rpc", obj);
         }
     }
 }

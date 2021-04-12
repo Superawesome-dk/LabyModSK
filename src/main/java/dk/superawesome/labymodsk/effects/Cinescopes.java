@@ -6,8 +6,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
-import org.bukkit.Bukkit;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -35,6 +34,6 @@ public class Cinescopes extends Effect {
         object.addProperty( "coverage", coverage.getSingle(event) );
         object.addProperty( "duration", duration.getSingle(event).getMilliSeconds());
         for (Player player : player.getArray(event))
-            LabyModPlugin.getInstance().sendServerMessage( player, "cinescopes", object );
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "cinescopes", object);
     }
 }

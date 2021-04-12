@@ -107,10 +107,10 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.github.labymod.labymod-server-api</groupId>
-            <artifactId>build</artifactId>
-            <version>master</version>
-            <scope>provided</scope>
+            <groupId>com.github.labymod</groupId>
+            <artifactId>labymod-server-api</artifactId>
+            <!--suppress MavenModelInspection -->
+            <version>main-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>

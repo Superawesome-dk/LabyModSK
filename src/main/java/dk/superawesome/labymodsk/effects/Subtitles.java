@@ -6,7 +6,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -37,8 +37,8 @@ public class Subtitles extends Effect {
                 result.add(array.get(i));
             }
         }
-        for(Player target : targets.getArray(event)) {
-            LabyModPlugin.getInstance().sendServerMessage( target, "account_subtitle", result );
+        for(Player player : targets.getArray(event)) {
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "account_subtitle", result );
         }
     }
 }

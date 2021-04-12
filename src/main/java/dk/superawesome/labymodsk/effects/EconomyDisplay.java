@@ -5,7 +5,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -40,6 +40,6 @@ public class EconomyDisplay extends Effect {
 
         economyObject.add(displayType.getSingle(event), cashObject);
         for (Player player : players.getArray(event))
-            LabyModPlugin.getInstance().sendServerMessage(player, "economy", economyObject);
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "economy", economyObject);
     }
 }

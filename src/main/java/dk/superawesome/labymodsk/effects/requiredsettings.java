@@ -7,7 +7,7 @@ import ch.njol.util.Kleenean;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -58,7 +58,7 @@ public class requiredsettings extends Effect {
         requestSettingsObject.add("settings", settingsObject);
         voicechatObject.add("request_settings", requestSettingsObject);
         for (Player player : targets.getArray(event)) {
-            LabyModPlugin.getInstance().sendServerMessage( player, "voicechat", voicechatObject );
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "voicechat", voicechatObject );
         }
     }
 }

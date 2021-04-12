@@ -8,7 +8,7 @@ import ch.njol.util.Kleenean;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -48,7 +48,7 @@ public class Cinematic extends Effect {
                 JsonObject json = (JsonObject) result.get(0);
                 Location l = new Location(Bukkit.getPlayer(player.getUniqueId()).getWorld(), json.get("x").getAsDouble(), json.get("y").getAsDouble(), json.get("z").getAsDouble());
                 player.teleport(l);
-                LabyModPlugin.getInstance().sendServerMessage( player, "cinematic", cinematic );
+                LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "cinematic", cinematic);
             }
         } else {
             for (Player player : targets.getArray(event)) {

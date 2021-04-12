@@ -5,7 +5,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import com.google.gson.JsonObject;
-import net.labymod.serverapi.bukkit.LabyModPlugin;
+import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
@@ -28,6 +28,6 @@ public class DisableWatermark extends Effect {
         JsonObject object = new JsonObject();
         object.addProperty("visible", false);
         for (Player player : player.getArray(event))
-            LabyModPlugin.getInstance().sendServerMessage(player, "watermark", object);
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "watermark", object);
     }
 }
