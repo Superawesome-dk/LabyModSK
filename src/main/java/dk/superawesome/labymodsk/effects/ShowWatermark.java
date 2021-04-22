@@ -9,7 +9,7 @@ import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-public class EnableWatermark extends Effect {
+public class ShowWatermark extends Effect {
     private Expression<Player> player;
 
     @SuppressWarnings("unchecked")

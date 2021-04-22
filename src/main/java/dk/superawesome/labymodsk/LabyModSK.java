@@ -87,7 +87,8 @@ public final class LabyModSK extends JavaPlugin {
         Skript.registerEffect(Subtitles.class, "show subtitles %strings% for %players%");
 
         // economy display
-        Skript.registerEffect(EconomyDisplay.class, "set economy display %string% for %players% to %number%");
+        Skript.registerEffect(ShowEconomyDisplay.class, "show economy display %string% with balance %number%[ and custom url %-string%][ and decimal format %-string% with divisor %-number%] for %players%");
+        Skript.registerEffect(HideEconomyDisplay.class, "hide economy display %string% for %players%");
 
         // voicechat
         Skript.registerEffect(EnableVoicechat.class, "enable voicechat for %players%");
@@ -106,8 +107,10 @@ public final class LabyModSK extends JavaPlugin {
         Skript.registerExpression(ExprLabyPackages.class, String.class, ExpressionType.COMBINED, "[the] labymod packages of %player%");
 
         // watermark
-        Skript.registerEffect(EnableWatermark.class, "enable watermark for %players%");
-        Skript.registerEffect(DisableVoicechat.class, "disable watermark for %players%");
+        Skript.registerEffect(ShowWatermark.class, "show watermark for %players%");
+        Skript.registerEffect(HideWatermark.class, "hide watermark for %players%");
+        Skript.registerEffect(ShowServerBanner.class, "show server banner with url %string% for %players%");
+        Skript.registerEffect(HideServerBanner.class, "hide server banner for %players%");
 
         // actionmenu
         Skript.registerEffect(ActionMenu.class, "show actionmenu %strings% to %players%");

@@ -9,7 +9,7 @@ import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-public class DisableWatermark extends Effect {
+public class HideServerBanner extends Effect {
     private Expression<Player> player;
 
     @SuppressWarnings("unchecked")
@@ -26,8 +26,7 @@ public class DisableWatermark extends Effect {
     @Override
     protected void execute(Event event) {
         JsonObject object = new JsonObject();
-        object.addProperty("visible", false);
         for (Player player : player.getArray(event))
-            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "watermark", object);
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(player.getUniqueId(), "server_banner", object);
     }
 }

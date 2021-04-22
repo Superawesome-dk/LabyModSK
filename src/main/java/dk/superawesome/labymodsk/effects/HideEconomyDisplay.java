@@ -9,17 +9,15 @@ import net.labymod.serverapi.api.LabyAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-public class EconomyDisplay extends Effect {
+public class HideEconomyDisplay extends Effect {
     private Expression<String> displayType;
     private Expression<Player> players;
-    private Expression<Number> number;
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
         this.displayType = (Expression<String>) expressions[0];
         this.players = (Expression<Player>) expressions[1];
-        this.number = (Expression<Number>) expressions[2];
         return true;
     }
     @Override
@@ -33,10 +31,7 @@ public class EconomyDisplay extends Effect {
         JsonObject cashObject = new JsonObject();
 
         // Visibility
-        cashObject.addProperty( "visible", true );
-
-        // Amount
-        cashObject.addProperty( "balance", number.getSingle(event) );
+        cashObject.addProperty( "visible", false );
 
         economyObject.add(displayType.getSingle(event), cashObject);
         for (Player player : players.getArray(event))
