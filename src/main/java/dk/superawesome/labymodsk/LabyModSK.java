@@ -112,6 +112,9 @@ public final class LabyModSK extends JavaPlugin {
         Skript.registerEffect(ShowServerBanner.class, "show server banner with url %string% for %players%");
         Skript.registerEffect(HideServerBanner.class, "hide server banner for %players%");
 
+        Skript.registerExpression(FlagUser.class, String.class, ExpressionType.COMBINED, "[the] flag for %players% and country %string%");
+        Skript.registerEffect(Flags.class, "show flaguser %strings% for %players%");
+
         // actionmenu
         Skript.registerEffect(ActionMenu.class, "show actionmenu %strings% to %players%");
         Skript.registerExpression(ActionEntry.class, String.class, ExpressionType.COMBINED, "[the] action entry with displayname %string% and type %string% and value %string%");
