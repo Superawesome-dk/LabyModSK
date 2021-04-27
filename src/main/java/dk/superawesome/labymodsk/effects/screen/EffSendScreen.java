@@ -24,7 +24,9 @@ public class EffSendScreen extends Effect {
 
     @Override
     protected void execute(Event e) {
-        LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(exprPlayer.getSingle(e).getUniqueId(), "screen", exprScreen.getSingle(e));
+        for(Player target : exprPlayer.getArray(e)) {
+            LabyAPI.getService().getPayloadCommunicator().sendLabyModMessage(target.getUniqueId(), "screen", exprScreen.getSingle(e));
+        }
     }
 
     @Override
