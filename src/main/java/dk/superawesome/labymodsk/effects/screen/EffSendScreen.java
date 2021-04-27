@@ -18,7 +18,7 @@ public class EffSendScreen extends Effect {
 
     static {
         Skript.registerEffect(EffSendScreen.class,
-                "[LabyModSK] send [screen] %jsonobject% to %players%");
+                "[LabyModSK] send [screen] %labymodskjsonobject% to %players%");
     }
 
 

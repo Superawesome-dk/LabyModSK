@@ -12,7 +12,7 @@ public class ExprAnchor extends SimplePropertyExpression<JsonObject, Anchor> {
     static {
         register(ExprAnchor.class, Anchor.class,
                 "[screen] anchor",
-                "jsonobject"
+                "labymodskjsonobject"
         );
     }
 

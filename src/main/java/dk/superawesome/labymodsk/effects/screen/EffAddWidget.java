@@ -20,11 +20,11 @@ import java.awt.*;
 public class EffAddWidget extends Effect {
     static {
         Skript.registerEffect(EffAddWidget.class,
-                "[LabyModSK] add button widget with id %integer%[ and anchorX %-double% and anchorY %-double%] and offsetX %double% and offsetY %double% and value %string% and width %integer% and height %integer%[ and close on click %-boolean%] to [widgets of] %jsonobject%",
-                "[LabyModSK] add text field widget with id %integer%[ and anchorX %-double% and anchorY %-double%] and offsetX %double% and offsetY %double% and value %string% and width %integer% and height %integer% and placeholder %string% and maxlength %integer% and focused %boolean% to [widgets of] %jsonobject%",
-                "[LabyModSK] add label widget with id %integer%[ and anchorX %-double% and anchorY %-double%] and offsetX %double% and offsetY %double% and value %string% and alignment %integer% and scale %double% to [widgets of] %jsonobject%",
-                "[LabyModSK] add color picker widget with id %integer%[ and anchorX %-double% and anchorY %-double%] and offsetX %double% and offsetY %double% and width %integer% and height %integer% and title %string% and color %javacolor%[ and use rgb %-boolean%] to [widgets of] %jsonobject%",
-                "[LabyModSK] add image widget with id %integer%[ and anchorX %-double% and anchorY %-double%] and offsetX %double% and offsetY %double% and width %integer% and height %integer% and url %string%[ and cutX %-integer% and cutY %-integer%][ and cutWidth %-integer% and cutHeight %-integer%] to [widgets of] %jsonobject%"
+                "[LabyModSK] add button widget with id %integer%[ and anchorX %-double% and anchorY %-double%] and offsetX %double% and offsetY %double% and value %string% and width %integer% and height %integer%[ and close on click %-boolean%] to [widgets of] %labymodskjsonobject%",
+                "[LabyModSK] add text field widget with id %integer%[ and anchorX %-double% and anchorY %-double%] and offsetX %double% and offsetY %double% and value %string% and width %integer% and height %integer% and placeholder %string% and maxlength %integer% and focused %boolean% to [widgets of] %labymodskjsonobject%",
+                "[LabyModSK] add label widget with id %integer%[ and anchorX %-double% and anchorY %-double%] and offsetX %double% and offsetY %double% and value %string% and alignment %integer% and scale %double% to [widgets of] %labymodskjsonobject%",
+                "[LabyModSK] add color picker widget with id %integer%[ and anchorX %-double% and anchorY %-double%] and offsetX %double% and offsetY %double% and width %integer% and height %integer% and title %string% and color %javacolor%[ and use rgb %-boolean%] to [widgets of] %labymodskjsonobject%",
+                "[LabyModSK] add image widget with id %integer%[ and anchorX %-double% and anchorY %-double%] and offsetX %double% and offsetY %double% and width %integer% and height %integer% and url %string%[ and cutX %-integer% and cutY %-integer%][ and cutWidth %-integer% and cutHeight %-integer%] to [widgets of] %labymodskjsonobject%"
         );
     }
 

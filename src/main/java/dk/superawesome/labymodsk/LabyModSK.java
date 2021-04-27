@@ -430,9 +430,9 @@ public final class LabyModSK extends JavaPlugin {
                     }
                 })
         );
-        Classes.registerClass(new ClassInfo<>(JsonObject.class, "jsonobject")
-                .user("jsonobject")
-                .name("jsonobject")
+        Classes.registerClass(new ClassInfo<>(JsonObject.class, "labymodskjsonobject")
+                .user("labymodskjsonobject")
+                .name("labymodskjsonobject")
                 .parser(new Parser<JsonObject>() {
 
                     @Override
