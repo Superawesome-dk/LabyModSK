@@ -1,13 +1,11 @@
 package dk.superawesome.labymodsk.commands;
 
-import dk.superawesome.labymodsk.Utils;
+import dk.superawesome.labymodsk.Utils.Util;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.npc.NPCDataStore;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.api.npc.SimpleNPCDataStore;
 import net.citizensnpcs.api.util.YamlStorage;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,7 +22,7 @@ public class labymodsk implements CommandExecutor {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if(player.isOp() == false){
-                player.sendMessage(Utils.color( "&8[&2LabyMod&8] &cDu har ikke adgang til denne kommando."));
+                player.sendMessage(Util.color( "&8[&2LabyMod&8] &cDu har ikke adgang til denne kommando."));
                 return true;
             }
         }
@@ -37,11 +35,11 @@ public class labymodsk implements CommandExecutor {
                 NPC newNpc = registry.createNPC(EntityType.PLAYER, uuid, npcId, args[1]);
                 newNpc.spawn(player.getLocation());
             } else {
-                player.sendMessage(Utils.color("&2Du har glemt navnet på npcen."));
+                player.sendMessage(Util.color("&2Du har glemt navnet på npcen."));
             }
             return true;
         }
-        player.sendMessage(Utils.color("&2/labymodsk npccreate"));
+        player.sendMessage(Util.color("&2/labymodsk npccreate"));
         return true;
     }
 }

@@ -19,6 +19,7 @@ import dk.superawesome.labymodsk.Expression.player.ExprLabyAddons;
 import dk.superawesome.labymodsk.Expression.player.ExprLabyMods;
 import dk.superawesome.labymodsk.Expression.player.ExprLabyPackages;
 import dk.superawesome.labymodsk.Expression.player.ExprLabyVersion;
+import dk.superawesome.labymodsk.Utils.Util;
 import dk.superawesome.labymodsk.classes.*;
 import dk.superawesome.labymodsk.commands.labymodsk;
 import dk.superawesome.labymodsk.condition.CondUsingLabymod;
@@ -29,11 +30,17 @@ import net.labymod.serverapi.api.extension.ModificationExtension;
 import net.labymod.serverapi.api.extension.PackageExtension;
 import net.labymod.serverapi.bukkit.event.BukkitLabyModPlayerLoginEvent;
 import net.labymod.serverapi.bukkit.event.BukkitMessageReceiveEvent;
+import net.labymod.serverapi.common.widgets.util.Anchor;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
+
+import javax.management.openmbean.SimpleType;
+import java.awt.*;
+import java.io.IOException;
 
 import static ch.njol.skript.registrations.EventValues.registerEventValue;
 
@@ -47,6 +54,13 @@ public final class LabyModSK extends JavaPlugin {
         registerClasses();
         instance = this;
         addonInstance = Skript.registerAddon(instance);
+
+        try {
+            //This will register all our syntax for us. Explained below
+            addonInstance.loadClasses("dk.superawesome.labymodsk.effects.screen");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if(Bukkit.getPluginManager().getPlugin("Citizens") != null) {
             this.getCommand("labymodsk").setExecutor(new labymodsk());
             Skript.registerExpression(ExprNpcFromID.class, NPC.class, ExpressionType.COMBINED, "[the] (npc|citizen) (of|from|with id) %number%");
@@ -390,5 +404,82 @@ public final class LabyModSK extends JavaPlugin {
                     }
 
                 }));
+        Classes.registerClass(new ClassInfo<>(Anchor.class, "anchor")
+                .user("anchor")
+                .name("anchor")
+                .parser(new Parser<Anchor>() {
+
+                    @Override
+                    public String toString(Anchor o, int flags) {
+                        return o.getX() + ", " + o.getY();
+                    }
+
+                    @Override
+                    public String toVariableNameString(Anchor o) {
+                        return ToStringBuilder.reflectionToString(o);
+                    }
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+                    @Nullable
+                    @Override
+                    public Anchor parse(String s, ParseContext context) {
+                        return null;
+                    }
+                })
+        );
+        Classes.registerClass(new ClassInfo<>(JsonObject.class, "jsonobject")
+                .user("jsonobject")
+                .name("jsonobject")
+                .parser(new Parser<JsonObject>() {
+
+                    @Override
+                    public String toString(JsonObject o, int flags) {
+                        return o.toString();
+                    }
+
+                    @Override
+                    public String toVariableNameString(JsonObject o) {
+                        return ToStringBuilder.reflectionToString(o);
+                    }
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+                    @Nullable
+                    @Override
+                    public JsonObject parse(String s, ParseContext context) {
+                        return null;
+                    }
+                })
+        );
+        Classes.registerClass(new ClassInfo<>(Color.class, "javacolor")
+                .user("javacolor")
+                .name("javacolor")
+                .parser(new Parser<Color>() {
+                    @Override
+                    public String toString(Color o, int flags) {
+                        return "color from rgb " + o.getRed() + ", " + o.getGreen() + " and " + o.getBlue();
+                    }
+
+                    @Override
+                    public String toVariableNameString(Color o) {
+                        return null;
+                    }
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return null;
+                    }
+                    @Nullable
+                    @Override
+                    public Color parse(String s, ParseContext context) {
+                        return Util.getColorFromString(s);
+                    }
+                })
+        );
     }
 }

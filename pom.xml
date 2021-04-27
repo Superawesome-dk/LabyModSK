@@ -46,6 +46,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <finalName>LabymodSK</finalName>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
                     </execution>
@@ -111,6 +112,11 @@
             <artifactId>labymod-server-api</artifactId>
             <!--suppress MavenModelInspection -->
             <version>main-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.LabyMod</groupId>
+            <artifactId>widgets</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
