@@ -456,7 +456,8 @@ public final class LabyModSK extends JavaPlugin {
                     }
                 })
         );
-        Classes.registerClass(new ClassInfo<>(Color.class, "labymodskjavacolor")
+        if(Bukkit.getPluginManager().getPlugin("Vixio") != null) {
+            Classes.registerClass(new ClassInfo<>(Color.class, "labymodskjavacolor")
                 .user("labymodskjavacolor")
                 .name("labymodskjavacolor")
                 .parser(new Parser<Color>() {
@@ -480,6 +481,7 @@ public final class LabyModSK extends JavaPlugin {
                         return Util.getColorFromString(s);
                     }
                 })
-        );
+        );   
+        }
     }
 }
