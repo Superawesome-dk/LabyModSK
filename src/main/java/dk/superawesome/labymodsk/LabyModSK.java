@@ -456,9 +456,9 @@ public final class LabyModSK extends JavaPlugin {
                     }
                 })
         );
-        Classes.registerClass(new ClassInfo<>(Color.class, "javacolor")
-                .user("javacolor")
-                .name("javacolor")
+        Classes.registerClass(new ClassInfo<>(Color.class, "labymodskjavacolor")
+                .user("labymodskjavacolor")
+                .name("labymodskjavacolor")
                 .parser(new Parser<Color>() {
                     @Override
                     public String toString(Color o, int flags) {
