@@ -456,7 +456,7 @@ public final class LabyModSK extends JavaPlugin {
                     }
                 })
         );
-        if(Bukkit.getPluginManager().getPlugin("Vixio") != null) {
+        if(Bukkit.getPluginManager().getPlugin("Vixio") == null) {
             Classes.registerClass(new ClassInfo<>(Color.class, "labymodskjavacolor")
                 .user("labymodskjavacolor")
                 .name("labymodskjavacolor")
