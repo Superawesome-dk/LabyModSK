@@ -7,14 +7,15 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import com.google.gson.JsonObject;
+import net.labymod.serverapi.common.widgets.WidgetScreen;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
-public class ExprLastScreen extends SimpleExpression<JsonObject> {
+public class ExprLastScreen extends SimpleExpression<WidgetScreen> {
 
     static {
-        Skript.registerExpression(ExprLastScreen.class, JsonObject.class, ExpressionType.SIMPLE,
+        Skript.registerExpression(ExprLastScreen.class, WidgetScreen.class, ExpressionType.SIMPLE,
                 "[the] [last] [(made|created|generated)] screen"
         );
     }
@@ -25,13 +26,13 @@ public class ExprLastScreen extends SimpleExpression<JsonObject> {
 
     @Nullable
     @Override
-    protected JsonObject[] get(Event e) {
-        return new JsonObject[]{scopeScreen.lastScreen};
+    protected WidgetScreen[] get(Event e) {
+        return new WidgetScreen[]{scopeScreen.lastScreen};
     }
 
     @Override
-    public Class<? extends JsonObject> getReturnType() {
-        return JsonObject.class;
+    public Class<? extends WidgetScreen> getReturnType() {
+        return WidgetScreen.class;
     }
 
     @Override

@@ -7,25 +7,24 @@ import ch.njol.util.Kleenean;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import dk.superawesome.labymodsk.Utils.EffectSection;
+import net.labymod.serverapi.common.widgets.WidgetScreen;
 import net.labymod.serverapi.common.widgets.util.EnumScreenAction;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
 public class scopeScreen extends EffectSection {
-    public static JsonObject lastScreen;
-    private Expression<Number> exprID;
-    private Expression<Number> exprACTION;
+    public static WidgetScreen lastScreen;
+    private Expression<Integer> exprID;
 
     static {
-        Skript.registerCondition(scopeScreen.class, "make [new] [labymod] screen with id %number% and action id %number%");
+        Skript.registerCondition(scopeScreen.class, "make [new] [labymod] screen with id %integer%");
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
-        exprID = (Expression<Number>) exprs[0];
-        exprACTION = (Expression<Number>) exprs[1];
+        exprID = (Expression<Integer>) exprs[0];
         if (checkIfCondition()) return false;
         if (!hasSection()) return false;
         loadSection(true);
@@ -34,17 +33,14 @@ public class scopeScreen extends EffectSection {
 
     @Override
     protected void execute(Event e) {
-        JsonObject screen = new JsonObject();
-        screen.addProperty("id", exprID.getSingle(e)); // Screen id. The client will send this id back on an interaction
-        screen.addProperty("action", exprACTION.getSingle(e)); // Open the GUI
-        screen.add("widgets", new JsonArray());
+        WidgetScreen screen = new WidgetScreen(exprID.getSingle(e));
         lastScreen = screen;
         runSection(e);
     }
 
     @Override
     public String toString(@Nullable Event e, boolean debug) {
-        return "make new labymod screen with id " + exprID.getSingle(e) + " and actionid " + exprACTION.getSingle(e);
+        return "make new labymod screen with id " + exprID.getSingle(e);
     }
 
 }

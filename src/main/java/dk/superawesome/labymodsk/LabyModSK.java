@@ -10,10 +10,7 @@ import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Getter;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import dk.superawesome.labymodsk.Expression.*;
 import dk.superawesome.labymodsk.Expression.player.ExprLabyAddons;
 import dk.superawesome.labymodsk.Expression.player.ExprLabyMods;
@@ -30,7 +27,11 @@ import net.labymod.serverapi.api.extension.ModificationExtension;
 import net.labymod.serverapi.api.extension.PackageExtension;
 import net.labymod.serverapi.bukkit.event.BukkitLabyModPlayerLoginEvent;
 import net.labymod.serverapi.bukkit.event.BukkitMessageReceiveEvent;
+import net.labymod.serverapi.common.widgets.WidgetScreen;
+import net.labymod.serverapi.common.widgets.components.Widget;
 import net.labymod.serverapi.common.widgets.util.Anchor;
+import net.labymod.serverapi.common.widgets.util.EnumScreenAction;
+import net.labymod.serverapi.common.widgets.util.EnumWidget;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -47,6 +48,18 @@ import static ch.njol.skript.registrations.EventValues.registerEventValue;
 public final class LabyModSK extends JavaPlugin {
     public static LabyModSK instance;
     public static SkriptAddon addonInstance;
+    private static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(Widget.class, (JsonSerializer<Widget>) (src, typeOfSrc, context) -> {
+                JsonObject object = new JsonObject();
+                object.addProperty("type", EnumWidget.getTypeOf(src.getClass()).ordinal());
+                object.add("attributes", context.serialize(src));
+                return object;
+            }).registerTypeAdapter(Widget.class, (JsonDeserializer<Widget>) (json, typeOfSrc, context) -> {
+                JsonObject obj = json.getAsJsonObject();
+                int id = obj.get("type").getAsInt();
+                JsonObject attributes = obj.get("attributes").getAsJsonObject();
+                return context.deserialize(attributes, EnumWidget.values()[id].getClazz());
+            }).create();
 
     @Override
     public void onEnable() {
@@ -56,7 +69,6 @@ public final class LabyModSK extends JavaPlugin {
         addonInstance = Skript.registerAddon(instance);
 
         try {
-            //This will register all our syntax for us. Explained below
             addonInstance.loadClasses("dk.superawesome.labymodsk.effects.screen");
         } catch (IOException e) {
             e.printStackTrace();
@@ -430,18 +442,19 @@ public final class LabyModSK extends JavaPlugin {
                     }
                 })
         );
-        Classes.registerClass(new ClassInfo<>(JsonObject.class, "labymodskjsonobject")
-                .user("labymodskjsonobject")
-                .name("labymodskjsonobject")
-                .parser(new Parser<JsonObject>() {
+        Classes.registerClass(new ClassInfo<>(WidgetScreen.class, "screen")
+                .user("screen")
+                .name("screen")
+                .parser(new Parser<WidgetScreen>() {
 
                     @Override
-                    public String toString(JsonObject o, int flags) {
-                        return o.toString();
+                    public String toString(WidgetScreen o, int flags) {
+                        JsonObject object = GSON.toJsonTree(o).getAsJsonObject();
+                        return object.toString();
                     }
 
                     @Override
-                    public String toVariableNameString(JsonObject o) {
+                    public String toVariableNameString(WidgetScreen o) {
                         return ToStringBuilder.reflectionToString(o);
                     }
 
@@ -451,7 +464,7 @@ public final class LabyModSK extends JavaPlugin {
                     }
                     @Nullable
                     @Override
-                    public JsonObject parse(String s, ParseContext context) {
+                    public WidgetScreen parse(String s, ParseContext context) {
                         return null;
                     }
                 })
