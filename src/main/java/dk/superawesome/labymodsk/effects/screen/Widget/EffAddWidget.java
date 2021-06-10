@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class EffAddWidget extends Effect {
     static {
-        Skript.registerEffect(EffSetLayout.class,
+        Skript.registerEffect(EffAddWidget.class,
                 "[LabyModSK] add %widget% to widgets of %screen%"
         );
     }

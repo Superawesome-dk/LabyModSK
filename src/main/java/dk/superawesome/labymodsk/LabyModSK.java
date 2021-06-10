@@ -470,7 +470,34 @@ public final class LabyModSK extends JavaPlugin {
                     }
                 })
         );
-        Classes.registerClass(new ClassInfo<>(WidgetType.class, "audiosite")
+        Classes.registerClass(new ClassInfo<>(Widget.class, "widget")
+                .user("widget")
+                .name("widget")
+                .parser(new Parser<Widget>() {
+
+                    @Override
+                    public String toString(Widget o, int flags) {
+                        JsonObject object = GSON.toJsonTree(o).getAsJsonObject();
+                        return object.toString();
+                    }
+
+                    @Override
+                    public String toVariableNameString(Widget o) {
+                        return ToStringBuilder.reflectionToString(o);
+                    }
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+                    @Nullable
+                    @Override
+                    public Widget parse(String s, ParseContext context) {
+                        return null;
+                    }
+                })
+        );
+        Classes.registerClass(new ClassInfo<>(WidgetType.class, "widgettype")
                 .user("widgettype?")
                 .name("Widget Type")
                 .parser(new Parser<WidgetType>() {
