@@ -41,6 +41,6 @@ public class ExprLastWidget extends SimpleExpression<Widget> {
 
     @Override
     public String toString(@Nullable Event e, boolean debug) {
-        return "the last generated screen";
+        return "the last generated widget";
     }
 }
