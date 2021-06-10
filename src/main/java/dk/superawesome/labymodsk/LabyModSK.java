@@ -37,6 +37,7 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.management.openmbean.SimpleType;
@@ -469,6 +470,33 @@ public final class LabyModSK extends JavaPlugin {
                     }
                 })
         );
+        Classes.registerClass(new ClassInfo<>(WidgetType.class, "audiosite")
+                .user("widgettype?")
+                .name("Widget Type")
+                .parser(new Parser<WidgetType>() {
+
+                    @Override
+                    public @NotNull String toString(@NotNull WidgetType c, int flags) {
+                        return c.name().toLowerCase();
+                    }
+
+                    @Override
+                    public @NotNull String toVariableNameString(@NotNull WidgetType c) {
+                        return c.name().toLowerCase();
+                    }
+
+                    @Override
+                    public @NotNull String getVariableNamePattern() {
+                        return "[a-z ]+";
+                    }
+
+                    @Nullable
+                    @Override
+                    public WidgetType parse(@NotNull String s, @NotNull ParseContext context) {
+                        for (WidgetType site : WidgetType.values()) if (site.name().toLowerCase().replace("_", " ").equalsIgnoreCase(s)) return site;
+                        return null;
+                    }
+                }));
         if(Bukkit.getPluginManager().getPlugin("Vixio") == null) {
             Classes.registerClass(new ClassInfo<>(Color.class, "labymodskjavacolor")
                 .user("labymodskjavacolor")
@@ -494,7 +522,7 @@ public final class LabyModSK extends JavaPlugin {
                         return Util.getColorFromString(s);
                     }
                 })
-        );   
+        );
         }
     }
 }
