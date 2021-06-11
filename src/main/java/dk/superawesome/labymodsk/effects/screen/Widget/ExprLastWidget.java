@@ -1,4 +1,4 @@
-package dk.superawesome.labymodsk.effects.screen;
+package dk.superawesome.labymodsk.effects.screen.Widget;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;
@@ -6,17 +6,16 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import com.google.gson.JsonObject;
-import net.labymod.serverapi.common.widgets.WidgetScreen;
+import net.labymod.serverapi.common.widgets.components.Widget;
+import net.labymod.serverapi.common.widgets.components.widgets.TextFieldWidget;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
-public class ExprLastScreen extends SimpleExpression<WidgetScreen> {
-
+public class ExprLastWidget extends SimpleExpression<Widget> {
     static {
-        Skript.registerExpression(ExprLastScreen.class, WidgetScreen.class, ExpressionType.SIMPLE,
-                "[the] [last] [(made|created|generated)] screen"
+        Skript.registerExpression(ExprLastWidget.class, Widget.class, ExpressionType.SIMPLE,
+                "[the] [last] [(made|created|generated)] widget"
         );
     }
     @Override
@@ -26,13 +25,13 @@ public class ExprLastScreen extends SimpleExpression<WidgetScreen> {
 
     @Nullable
     @Override
-    protected WidgetScreen[] get(Event e) {
-        return new WidgetScreen[]{scopeScreen.lastScreen};
+    protected Widget[] get(Event e) {
+        return new Widget[]{scopeWidget.lastWidget};
     }
 
     @Override
-    public Class<? extends WidgetScreen> getReturnType() {
-        return WidgetScreen.class;
+    public Class<? extends Widget> getReturnType() {
+        return Widget.class;
     }
 
     @Override
@@ -42,6 +41,6 @@ public class ExprLastScreen extends SimpleExpression<WidgetScreen> {
 
     @Override
     public String toString(@Nullable Event e, boolean debug) {
-        return "the last generated screen";
+        return "the last generated widget type";
     }
 }

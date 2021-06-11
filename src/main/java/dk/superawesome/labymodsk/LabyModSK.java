@@ -3,17 +3,16 @@ package dk.superawesome.labymodsk;
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import ch.njol.skript.classes.ClassInfo;
+import ch.njol.skript.classes.Converter;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.Classes;
+import ch.njol.skript.registrations.Converters;
 import ch.njol.skript.util.Getter;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import dk.superawesome.labymodsk.Expression.*;
 import dk.superawesome.labymodsk.Expression.player.ExprLabyAddons;
 import dk.superawesome.labymodsk.Expression.player.ExprLabyMods;
@@ -30,12 +29,22 @@ import net.labymod.serverapi.api.extension.ModificationExtension;
 import net.labymod.serverapi.api.extension.PackageExtension;
 import net.labymod.serverapi.bukkit.event.BukkitLabyModPlayerLoginEvent;
 import net.labymod.serverapi.bukkit.event.BukkitMessageReceiveEvent;
+import net.labymod.serverapi.common.widgets.WidgetScreen;
+import net.labymod.serverapi.common.widgets.components.ContainerWidget;
+import net.labymod.serverapi.common.widgets.components.ValueContainerWidget;
+import net.labymod.serverapi.common.widgets.components.Widget;
+import net.labymod.serverapi.common.widgets.components.widgets.ButtonWidget;
+import net.labymod.serverapi.common.widgets.components.widgets.LabelWidget;
+import net.labymod.serverapi.common.widgets.components.widgets.TextFieldWidget;
 import net.labymod.serverapi.common.widgets.util.Anchor;
+import net.labymod.serverapi.common.widgets.util.EnumScreenAction;
+import net.labymod.serverapi.common.widgets.util.EnumWidget;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.management.openmbean.SimpleType;
@@ -47,6 +56,18 @@ import static ch.njol.skript.registrations.EventValues.registerEventValue;
 public final class LabyModSK extends JavaPlugin {
     public static LabyModSK instance;
     public static SkriptAddon addonInstance;
+    private static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(Widget.class, (JsonSerializer<Widget>) (src, typeOfSrc, context) -> {
+                JsonObject object = new JsonObject();
+                object.addProperty("type", EnumWidget.getTypeOf(src.getClass()).ordinal());
+                object.add("attributes", context.serialize(src));
+                return object;
+            }).registerTypeAdapter(Widget.class, (JsonDeserializer<Widget>) (json, typeOfSrc, context) -> {
+                JsonObject obj = json.getAsJsonObject();
+                int id = obj.get("type").getAsInt();
+                JsonObject attributes = obj.get("attributes").getAsJsonObject();
+                return context.deserialize(attributes, EnumWidget.values()[id].getClazz());
+            }).create();
 
     @Override
     public void onEnable() {
@@ -56,7 +77,6 @@ public final class LabyModSK extends JavaPlugin {
         addonInstance = Skript.registerAddon(instance);
 
         try {
-            //This will register all our syntax for us. Explained below
             addonInstance.loadClasses("dk.superawesome.labymodsk.effects.screen");
         } catch (IOException e) {
             e.printStackTrace();
@@ -430,18 +450,18 @@ public final class LabyModSK extends JavaPlugin {
                     }
                 })
         );
-        Classes.registerClass(new ClassInfo<>(JsonObject.class, "labymodskjsonobject")
-                .user("labymodskjsonobject")
-                .name("labymodskjsonobject")
-                .parser(new Parser<JsonObject>() {
+        Classes.registerClass(new ClassInfo<>(OffSet.class, "offset")
+                .user("offset")
+                .name("offset")
+                .parser(new Parser<OffSet>() {
 
                     @Override
-                    public String toString(JsonObject o, int flags) {
-                        return o.toString();
+                    public String toString(OffSet o, int flags) {
+                        return o.getX() + ", " + o.getY();
                     }
 
                     @Override
-                    public String toVariableNameString(JsonObject o) {
+                    public String toVariableNameString(OffSet o) {
                         return ToStringBuilder.reflectionToString(o);
                     }
 
@@ -451,11 +471,118 @@ public final class LabyModSK extends JavaPlugin {
                     }
                     @Nullable
                     @Override
-                    public JsonObject parse(String s, ParseContext context) {
+                    public OffSet parse(String s, ParseContext context) {
                         return null;
                     }
                 })
         );
+        Classes.registerClass(new ClassInfo<>(CutXY.class, "cutxy")
+                .user("cutxy")
+                .name("cutxy")
+                .parser(new Parser<CutXY>() {
+
+                    @Override
+                    public String toString(CutXY o, int flags) {
+                        return o.getX() + ", " + o.getY();
+                    }
+
+                    @Override
+                    public String toVariableNameString(CutXY o) {
+                        return ToStringBuilder.reflectionToString(o);
+                    }
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+                    @Nullable
+                    @Override
+                    public CutXY parse(String s, ParseContext context) {
+                        return null;
+                    }
+                })
+        );
+        Classes.registerClass(new ClassInfo<>(WidgetScreen.class, "screen")
+                .user("screen")
+                .name("screen")
+                .parser(new Parser<WidgetScreen>() {
+
+                    @Override
+                    public String toString(WidgetScreen o, int flags) {
+                        JsonObject object = GSON.toJsonTree(o).getAsJsonObject();
+                        return object.toString();
+                    }
+
+                    @Override
+                    public String toVariableNameString(WidgetScreen o) {
+                        return ToStringBuilder.reflectionToString(o);
+                    }
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+                    @Nullable
+                    @Override
+                    public WidgetScreen parse(String s, ParseContext context) {
+                        return null;
+                    }
+                })
+        );
+        Classes.registerClass(new ClassInfo<>(Widget.class, "widget")
+                .user("widget")
+                .name("widget")
+                .parser(new Parser<Widget>() {
+
+                    @Override
+                    public String toString(Widget o, int flags) {
+                        JsonObject object = GSON.toJsonTree(o).getAsJsonObject();
+                        return object.toString();
+                    }
+
+                    @Override
+                    public String toVariableNameString(Widget o) {
+                        return ToStringBuilder.reflectionToString(o);
+                    }
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+                    @Nullable
+                    @Override
+                    public Widget parse(String s, ParseContext context) {
+                        return null;
+                    }
+                })
+        );
+        Classes.registerClass(new ClassInfo<>(WidgetType.class, "widgettype")
+                .user("widgettype?")
+                .name("Widget Type")
+                .parser(new Parser<WidgetType>() {
+
+                    @Override
+                    public @NotNull String toString(@NotNull WidgetType c, int flags) {
+                        return c.name().toLowerCase();
+                    }
+
+                    @Override
+                    public @NotNull String toVariableNameString(@NotNull WidgetType c) {
+                        return c.name().toLowerCase();
+                    }
+
+                    @Override
+                    public @NotNull String getVariableNamePattern() {
+                        return "[a-z ]+";
+                    }
+
+                    @Nullable
+                    @Override
+                    public WidgetType parse(@NotNull String s, @NotNull ParseContext context) {
+                        for (WidgetType site : WidgetType.values()) if (site.name().toLowerCase().replace("_", " ").equalsIgnoreCase(s)) return site;
+                        return null;
+                    }
+                }));
         if(Bukkit.getPluginManager().getPlugin("Vixio") == null) {
             Classes.registerClass(new ClassInfo<>(Color.class, "labymodskjavacolor")
                 .user("labymodskjavacolor")
@@ -481,7 +608,7 @@ public final class LabyModSK extends JavaPlugin {
                         return Util.getColorFromString(s);
                     }
                 })
-        );   
+        );
         }
     }
 }

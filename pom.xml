@@ -110,13 +110,12 @@
         <dependency>
             <groupId>com.github.labymod</groupId>
             <artifactId>labymod-server-api</artifactId>
-            <!--suppress MavenModelInspection -->
-            <version>main-SNAPSHOT</version>
+            <version>main-9c591b9230-1</version>
         </dependency>
         <dependency>
             <groupId>com.github.LabyMod</groupId>
             <artifactId>widgets</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
