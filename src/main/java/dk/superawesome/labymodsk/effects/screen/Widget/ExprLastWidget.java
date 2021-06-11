@@ -7,12 +7,12 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import net.labymod.serverapi.common.widgets.components.Widget;
+import net.labymod.serverapi.common.widgets.components.widgets.TextFieldWidget;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
 public class ExprLastWidget extends SimpleExpression<Widget> {
-
     static {
         Skript.registerExpression(ExprLastWidget.class, Widget.class, ExpressionType.SIMPLE,
                 "[the] [last] [(made|created|generated)] widget"
@@ -41,6 +41,6 @@ public class ExprLastWidget extends SimpleExpression<Widget> {
 
     @Override
     public String toString(@Nullable Event e, boolean debug) {
-        return "the last generated widget";
+        return "the last generated widget type";
     }
 }

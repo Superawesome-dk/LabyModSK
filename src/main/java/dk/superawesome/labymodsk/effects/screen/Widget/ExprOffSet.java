@@ -1,4 +1,4 @@
-package dk.superawesome.labymodsk.effects.screen;
+package dk.superawesome.labymodsk.effects.screen.Widget;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;
@@ -6,20 +6,21 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import dk.superawesome.labymodsk.classes.OffSet;
 import net.labymod.serverapi.common.widgets.util.Anchor;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
-public class ExprAnchor extends SimpleExpression<Anchor> {
+public class ExprOffSet extends SimpleExpression<OffSet> {
     static {
-        Skript.registerExpression(ExprAnchor.class, Anchor.class, ExpressionType.COMBINED, "[the] anchor %double%, %double%");
+        Skript.registerExpression(ExprOffSet.class, OffSet.class, ExpressionType.COMBINED, "[the] offset %double%, %double%");
     }
 
     private Expression<Double> exprX;
     private Expression<Double> exprY;
 
-    public Class<? extends Anchor> getReturnType() {
-        return Anchor.class;
+    public Class<? extends OffSet> getReturnType() {
+        return OffSet.class;
     }
 
     @Override
@@ -42,8 +43,8 @@ public class ExprAnchor extends SimpleExpression<Anchor> {
 
     @Override
     @Nullable
-    protected Anchor[] get(Event event) {
-        return new Anchor[] {new Anchor(exprX.getSingle(event), exprY.getSingle(event))};
+    protected OffSet[] get(Event event) {
+        return new OffSet[] {new OffSet(exprX.getSingle(event), exprY.getSingle(event))};
     }
 
 }

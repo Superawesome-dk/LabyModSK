@@ -3,12 +3,14 @@ package dk.superawesome.labymodsk;
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAddon;
 import ch.njol.skript.classes.ClassInfo;
+import ch.njol.skript.classes.Converter;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.expressions.base.EventValueExpression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.registrations.Classes;
+import ch.njol.skript.registrations.Converters;
 import ch.njol.skript.util.Getter;
 import com.google.gson.*;
 import dk.superawesome.labymodsk.Expression.*;
@@ -28,7 +30,12 @@ import net.labymod.serverapi.api.extension.PackageExtension;
 import net.labymod.serverapi.bukkit.event.BukkitLabyModPlayerLoginEvent;
 import net.labymod.serverapi.bukkit.event.BukkitMessageReceiveEvent;
 import net.labymod.serverapi.common.widgets.WidgetScreen;
+import net.labymod.serverapi.common.widgets.components.ContainerWidget;
+import net.labymod.serverapi.common.widgets.components.ValueContainerWidget;
 import net.labymod.serverapi.common.widgets.components.Widget;
+import net.labymod.serverapi.common.widgets.components.widgets.ButtonWidget;
+import net.labymod.serverapi.common.widgets.components.widgets.LabelWidget;
+import net.labymod.serverapi.common.widgets.components.widgets.TextFieldWidget;
 import net.labymod.serverapi.common.widgets.util.Anchor;
 import net.labymod.serverapi.common.widgets.util.EnumScreenAction;
 import net.labymod.serverapi.common.widgets.util.EnumWidget;
@@ -439,6 +446,58 @@ public final class LabyModSK extends JavaPlugin {
                     @Nullable
                     @Override
                     public Anchor parse(String s, ParseContext context) {
+                        return null;
+                    }
+                })
+        );
+        Classes.registerClass(new ClassInfo<>(OffSet.class, "offset")
+                .user("offset")
+                .name("offset")
+                .parser(new Parser<OffSet>() {
+
+                    @Override
+                    public String toString(OffSet o, int flags) {
+                        return o.getX() + ", " + o.getY();
+                    }
+
+                    @Override
+                    public String toVariableNameString(OffSet o) {
+                        return ToStringBuilder.reflectionToString(o);
+                    }
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+                    @Nullable
+                    @Override
+                    public OffSet parse(String s, ParseContext context) {
+                        return null;
+                    }
+                })
+        );
+        Classes.registerClass(new ClassInfo<>(CutXY.class, "cutxy")
+                .user("cutxy")
+                .name("cutxy")
+                .parser(new Parser<CutXY>() {
+
+                    @Override
+                    public String toString(CutXY o, int flags) {
+                        return o.getX() + ", " + o.getY();
+                    }
+
+                    @Override
+                    public String toVariableNameString(CutXY o) {
+                        return ToStringBuilder.reflectionToString(o);
+                    }
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+                    @Nullable
+                    @Override
+                    public CutXY parse(String s, ParseContext context) {
                         return null;
                     }
                 })

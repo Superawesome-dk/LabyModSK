@@ -9,6 +9,7 @@ public enum WidgetType {
     BUTTON,
     COLOR_PICKER,
     IMAGE,
+    INVENTORY_IMAGE,
     TEXT_FIELD,
     LABEL;
 }

@@ -7,11 +7,12 @@ import ch.njol.util.Kleenean;
 import dk.superawesome.labymodsk.Utils.EffectSection;
 import dk.superawesome.labymodsk.classes.WidgetType;
 import net.labymod.serverapi.common.widgets.components.Widget;
-import net.labymod.serverapi.common.widgets.components.widgets.ButtonWidget;
+import net.labymod.serverapi.common.widgets.components.widgets.*;
 import net.labymod.serverapi.common.widgets.util.Anchor;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 
 public class scopeWidget extends EffectSection {
     public static Widget lastWidget;
@@ -38,6 +39,16 @@ public class scopeWidget extends EffectSection {
         Widget widget = null;
         if(exprTYPE.getSingle(e) == WidgetType.BUTTON) {
             widget = new ButtonWidget(exprID.getSingle(e), new Anchor(0, 0), 0, 0, null, 0, 0);
+        } else if(exprTYPE.getSingle(e) == WidgetType.TEXT_FIELD) {
+            widget = new TextFieldWidget(exprID.getSingle(e), new Anchor(0, 0), 0, 0, null, 0, 0, null, 0, false);
+        } else if(exprTYPE.getSingle(e) == WidgetType.LABEL) {
+            widget = new LabelWidget(exprID.getSingle(e), new Anchor(0, 0), 0, 0, "", 0, 0);
+        } else if(exprTYPE.getSingle(e) == WidgetType.COLOR_PICKER) {
+            widget = new ColorPickerWidget(exprID.getSingle(e), new Anchor(0, 0), 0, 0, 0, 0, null, Color.BLACK);
+        } else if(exprTYPE.getSingle(e) == WidgetType.IMAGE) {
+            widget = new ImageWidget(exprID.getSingle(e), new Anchor(0, 0), 0, 0, 0, 0, null);
+        } else if(exprTYPE.getSingle(e) == WidgetType.INVENTORY_IMAGE) {
+            widget = new ImageWidget(exprID.getSingle(e), null);
         }
         lastWidget = widget;
         runSection(e);
