@@ -78,6 +78,7 @@ public final class LabyModSK extends JavaPlugin {
 
         try {
             addonInstance.loadClasses("dk.superawesome.labymodsk.effects.screen");
+            addonInstance.loadClasses("dk.superawesome.labymodsk.effects.Marker");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -312,6 +313,33 @@ public final class LabyModSK extends JavaPlugin {
 
                     @Override
                     public String toVariableNameString(MessageKey arg0) {
+                        return arg0.toString();
+                    }
+
+                }));
+        Classes.registerClass(new ClassInfo<>(marker.class, "marker")
+                .defaultExpression(new EventValueExpression<>(marker.class))
+                .user("marker")
+                .name("marker")
+                .parser(new Parser<marker>() {
+
+                    @Override
+                    public String getVariableNamePattern() {
+                        return ".+";
+                    }
+
+                    @Override
+                    public marker parse(String arg0, ParseContext arg1) {
+                        return null;
+                    }
+
+                    @Override
+                    public String toString(marker arg0, int arg1) {
+                        return "Location " + arg0.getLocation().toString() + " and sender " + arg0.getSender() + " and target " + arg0.getTarget();
+                    }
+
+                    @Override
+                    public String toVariableNameString(marker arg0) {
                         return arg0.toString();
                     }
 
